@@ -1,0 +1,32 @@
+server:
+  port: 8080
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+  instance:
+    hostname: localhost
+
+spring:
+  application:
+    name: gateway-service
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+      routes:
+        - id: auth-service
+          uri: lb://auth-service
+          predicates:
+            - Path=/api/auth/**
+        - id: chat-service
+          uri: lb://chat-service
+          predicates:
+            - Path=/api/message/**
+        - id: email-service
+          uri: lb://email-service
+          predicates:
+            - Path=/api/email/**
