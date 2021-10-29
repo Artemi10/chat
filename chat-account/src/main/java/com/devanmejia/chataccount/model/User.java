@@ -1,4 +1,4 @@
-package com.devanmejia.chataccount.models;
+package com.devanmejia.chataccount.model;
 
 import jakarta.persistence.*;
 
