@@ -1,6 +1,6 @@
 package com.devanmejia.chataccount.repository.user;
 
-import com.devanmejia.chataccount.models.User;
+import com.devanmejia.chataccount.model.User;
 
 import java.util.List;
 import java.util.Optional;

@@ -1,11 +1,10 @@
 package com.devanmejia.chataccount.repository.chat;
 
-import com.devanmejia.chataccount.models.Chat;
-import com.devanmejia.chataccount.models.User;
+import com.devanmejia.chataccount.model.Chat;
+import com.devanmejia.chataccount.model.User;
 import jakarta.ejb.Stateless;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.Query;
 
 import java.util.List;
 import java.util.Optional;
