@@ -1,11 +1,19 @@
 package com.devanmejia.chataccount.model;
 
-import jakarta.persistence.*;
 
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import javax.persistence.*;
 import java.util.Set;
 
+@Data
 @Entity
 @Table(name = "chats")
+@NoArgsConstructor
+@AllArgsConstructor
 public class Chat extends BaseEntity {
     @Column(name = "name")
     private String name;
@@ -14,31 +22,4 @@ public class Chat extends BaseEntity {
     private User admin;
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "chats")
     private Set<User> users;
-
-    public Chat() {
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public User getAdmin() {
-        return admin;
-    }
-
-    public void setAdmin(User admin) {
-        this.admin = admin;
-    }
-
-    public Set<User> getUsers() {
-        return users;
-    }
-
-    public void setUsers(Set<User> users) {
-        this.users = users;
-    }
 }

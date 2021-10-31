@@ -1,12 +1,19 @@
 package com.devanmejia.chataccount.model;
 
-import jakarta.persistence.*;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import javax.persistence.*;
 import java.util.Date;
 import java.util.Set;
 
+@Data
 @Entity
 @Table(name = "users")
+@NoArgsConstructor
+@AllArgsConstructor
 public class User extends BaseEntity{
     @Column(name = "login")
     private String login;
@@ -22,39 +29,4 @@ public class User extends BaseEntity{
             joinColumns = { @JoinColumn(name = "user_id") },
             inverseJoinColumns = { @JoinColumn(name = "chat_id") })
     private Set<Chat> chats;
-
-    public User() {
-    }
-
-    public String getLogin() {
-        return login;
-    }
-
-    public void setLogin(String login) {
-        this.login = login;
-    }
-
-    public Date getBirthDate() {
-        return birthDate;
-    }
-
-    public void setBirthDate(Date birthDate) {
-        this.birthDate = birthDate;
-    }
-
-    public Set<User> getFriends() {
-        return friends;
-    }
-
-    public void setFriends(Set<User> friends) {
-        this.friends = friends;
-    }
-
-    public Set<Chat> getChats() {
-        return chats;
-    }
-
-    public void setChats(Set<Chat> chats) {
-        this.chats = chats;
-    }
 }
