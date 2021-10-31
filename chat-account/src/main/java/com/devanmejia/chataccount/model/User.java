@@ -1,17 +1,18 @@
 package com.devanmejia.chataccount.model;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.hibernate.Hibernate;
 import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.Objects;
 import java.util.Set;
 
-@Data
 @Entity
+@Getter
+@Setter
 @Table(name = "users")
 @NoArgsConstructor
 @AllArgsConstructor
@@ -31,4 +32,17 @@ public class User extends BaseEntity{
             joinColumns = { @JoinColumn(name = "user_id") },
             inverseJoinColumns = { @JoinColumn(name = "chat_id") })
     private Set<Chat> chats;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        User user = (User) o;
+        return Objects.equals(login, user.login);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(login);
+    }
 }
