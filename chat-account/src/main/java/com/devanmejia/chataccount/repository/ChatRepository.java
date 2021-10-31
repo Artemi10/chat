@@ -2,6 +2,7 @@ package com.devanmejia.chataccount.repository;
 
 import com.devanmejia.chataccount.model.Chat;
 import com.devanmejia.chataccount.model.User;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -10,6 +11,8 @@ import java.util.Optional;
 
 @Repository
 public interface ChatRepository extends JpaRepository<Chat, Long> {
+    @EntityGraph(type = EntityGraph.EntityGraphType.LOAD, value = "chat_users")
     List<Chat> findAllByAdmin(User admin);
+    @EntityGraph(type = EntityGraph.EntityGraphType.LOAD, value = "chat_users")
     Optional<Chat> findByName(String name);
 }

@@ -14,6 +14,8 @@ import java.util.Set;
 @Table(name = "chats")
 @NoArgsConstructor
 @AllArgsConstructor
+@NamedEntityGraph(name = "chat_users",
+        attributeNodes = @NamedAttributeNode("users"))
 public class Chat extends BaseEntity {
     @NaturalId
     @Column(name = "name")

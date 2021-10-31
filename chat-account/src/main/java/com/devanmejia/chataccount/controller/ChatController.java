@@ -46,7 +46,7 @@ public class ChatController {
 
     @ResponsePayload
     @PayloadRoot(namespace = NAMESPACE_URI, localPart = "getChatsByAdminNameRequest")
-    public GetChatsByAdminNameResponse getChatByName(@RequestPayload GetChatsByAdminNameRequest request) {
+    public GetChatsByAdminNameResponse getChatsByAdminName(@RequestPayload GetChatsByAdminNameRequest request) {
         User admin = userRepository.findUserByLogin(request.getAdminName())
                 .orElseThrow(() -> new NotFoundException(String.format("User %s not found", request.getAdminName())));
         GetChatsByAdminNameResponse response = new GetChatsByAdminNameResponse();
