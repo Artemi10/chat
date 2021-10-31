@@ -15,4 +15,6 @@ public interface ChatRepository extends JpaRepository<Chat, Long> {
     List<Chat> findAllByAdmin(User admin);
     @EntityGraph(type = EntityGraph.EntityGraphType.LOAD, value = "chat_users")
     Optional<Chat> findByName(String name);
+    @EntityGraph(type = EntityGraph.EntityGraphType.LOAD, value = "chat_users")
+    List<Chat> findAllByAdminLogin(String login);
 }
