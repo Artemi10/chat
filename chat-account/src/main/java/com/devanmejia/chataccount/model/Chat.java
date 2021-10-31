@@ -5,6 +5,7 @@ package com.devanmejia.chataccount.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -15,6 +16,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Chat extends BaseEntity {
+    @NaturalId
     @Column(name = "name")
     private String name;
     @ManyToOne(fetch = FetchType.EAGER)
