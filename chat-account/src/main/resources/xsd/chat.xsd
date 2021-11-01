@@ -34,6 +34,25 @@
         </xs:complexType>
     </xs:element>
 
+    <xs:element name="createChatRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="chatName" type="xs:string"/>
+                <xs:element name="adminName" type="xs:string"/>
+                <xs:element name="userNames" type="xs:string"
+                            minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="createChatResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="chat" type="tns:ChatDTO"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
     <xs:complexType name="ChatDTO">
         <xs:sequence>
             <xs:element name="name" type="xs:string"/>

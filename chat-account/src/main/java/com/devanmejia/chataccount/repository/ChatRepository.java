@@ -13,8 +13,16 @@ import java.util.Optional;
 public interface ChatRepository extends JpaRepository<Chat, Long> {
     @EntityGraph(type = EntityGraph.EntityGraphType.LOAD, value = "chat_users")
     List<Chat> findAllByAdmin(User admin);
+
     @EntityGraph(type = EntityGraph.EntityGraphType.LOAD, value = "chat_users")
     Optional<Chat> findByName(String name);
+
     @EntityGraph(type = EntityGraph.EntityGraphType.LOAD, value = "chat_users")
     List<Chat> findAllByAdminLogin(String login);
+
+    boolean existsByName(String name);
+
+    default boolean notExistsByName(String name){
+        return !existsByName(name);
+    }
 }

@@ -1,8 +1,7 @@
 package com.devanmejia.chataccount.config;
 
 import com.devanmejia.chataccount.exception.ConverterException;
-import com.devanmejia.chataccount.exception.NotFoundException;
-import org.aspectj.weaver.ast.Not;
+import com.devanmejia.chataccount.exception.EntityException;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -17,7 +16,6 @@ import org.springframework.ws.wsdl.wsdl11.DefaultWsdl11Definition;
 import org.springframework.xml.xsd.SimpleXsdSchema;
 import org.springframework.xml.xsd.XsdSchema;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.Properties;
 
 @EnableWs
@@ -56,7 +54,7 @@ public class WebServiceConfig extends WsConfigurerAdapter {
 
         Properties errorMappings = new Properties();
         errorMappings.setProperty(Exception.class.getName(), SoapFaultDefinition.SERVER.toString());
-        errorMappings.setProperty(NotFoundException.class.getName(), SoapFaultDefinition.CLIENT.toString());
+        errorMappings.setProperty(EntityException.class.getName(), SoapFaultDefinition.CLIENT.toString());
         errorMappings.setProperty(ConverterException.class.getName(), SoapFaultDefinition.CLIENT.toString());
         exceptionResolver.setExceptionMappings(errorMappings);
         exceptionResolver.setOrder(1);

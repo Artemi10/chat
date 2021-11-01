@@ -1,8 +1,10 @@
 package com.devanmejia.chataccount.controller;
 
 import com.devanmejia.chataccount.model.Chat;
+import com.devanmejia.chataccount.model.User;
 import com.devanmejia.chataccount.service.chat.ChatService;
 import com.devanmejia.chataccount.service.converter.Converter;
+import com.devanmejia.chataccount.service.user.UserService;
 import io.spring.guides.gs_producing_web_service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ws.server.endpoint.annotation.Endpoint;
@@ -11,16 +13,19 @@ import org.springframework.ws.server.endpoint.annotation.RequestPayload;
 import org.springframework.ws.server.endpoint.annotation.ResponsePayload;
 
 import java.util.List;
+import java.util.Set;
 
 @Endpoint
 public class ChatController {
     private static final String NAMESPACE_URI = "http://spring.io/guides/gs-producing-web-service";
     private final ChatService chatService;
+    private final UserService userService;
     private final Converter<ChatDTO, Chat> chatConverter;
 
     @Autowired
-    public ChatController(ChatService chatService, Converter<ChatDTO, Chat> chatConverter) {
+    public ChatController(ChatService chatService, UserService userService, Converter<ChatDTO, Chat> chatConverter) {
         this.chatService = chatService;
+        this.userService = userService;
         this.chatConverter = chatConverter;
     }
 
@@ -36,9 +41,21 @@ public class ChatController {
     @ResponsePayload
     @PayloadRoot(namespace = NAMESPACE_URI, localPart = "getChatsByAdminNameRequest")
     public GetChatsByAdminNameResponse getChatsByAdminName(@RequestPayload GetChatsByAdminNameRequest request) {
-        List<Chat> chats = chatService.findByAdminLogin(request.getAdminName());
+        User admin = userService.findByLogin(request.getAdminName());
+        List<Chat> chats = chatService.findByAdminLogin(admin);
         GetChatsByAdminNameResponse response = new GetChatsByAdminNameResponse();
         response.getChats().addAll(chatConverter.convert(chats));
+        return response;
+    }
+
+    @ResponsePayload
+    @PayloadRoot(namespace = NAMESPACE_URI, localPart = "createChatRequest")
+    public CreateChatResponse createChat(@RequestPayload CreateChatRequest request) {
+        User admin = userService.findByLogin(request.getAdminName());
+        Set<User> users = userService.findAllByLogins(request.getUserNames());
+        Chat chat = chatService.createChat(request.getChatName(), admin, users);
+        CreateChatResponse response = new CreateChatResponse();
+        response.setChat(chatConverter.convert(chat));
         return response;
     }
 }
