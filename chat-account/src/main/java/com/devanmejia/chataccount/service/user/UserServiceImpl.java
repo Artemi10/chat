@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -22,12 +21,19 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findByLogin(String login) {
-        return userRepository.findUserByLogin(login)
+        return userRepository.findByLogin(login)
                 .orElseThrow(() -> new EntityException(String.format("User %s not found", login)));
     }
 
     @Override
     public Set<User> findAllByLogins(Collection<String> logins) {
         return logins.stream().map(this::findByLogin).collect(Collectors.toSet());
+    }
+
+    @Override
+    public Set<User> getFriends(String login) {
+        return userRepository.findByLoginWithFriends(login)
+                .orElseThrow(() -> new EntityException(String.format("User %s not found", login)))
+                .getFriends();
     }
 }

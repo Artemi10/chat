@@ -2,6 +2,7 @@ package com.devanmejia.chataccount.config;
 
 import com.devanmejia.chataccount.exception.ConverterException;
 import com.devanmejia.chataccount.exception.EntityException;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -29,8 +30,9 @@ public class WebServiceConfig extends WsConfigurerAdapter {
         return new ServletRegistrationBean<>(servlet, "/ws/*");
     }
 
-    @Bean(name = "chat")
-    public DefaultWsdl11Definition defaultWsdl11Definition(XsdSchema chatsSchema) {
+    @Bean("chat")
+    public DefaultWsdl11Definition chatsWsdl11Definition(
+            @Qualifier("chatsSchema") XsdSchema chatsSchema) {
         DefaultWsdl11Definition wsdl11Definition = new DefaultWsdl11Definition();
         wsdl11Definition.setPortTypeName("ChatPort");
         wsdl11Definition.setLocationUri("/ws");
@@ -39,9 +41,25 @@ public class WebServiceConfig extends WsConfigurerAdapter {
         return wsdl11Definition;
     }
 
-    @Bean
+    @Bean("chatsSchema")
     public XsdSchema chatsSchema() {
         return new SimpleXsdSchema(new ClassPathResource("/xsd/chat.xsd"));
+    }
+
+    @Bean("user")
+    public DefaultWsdl11Definition usersWsdl11Definition(
+            @Qualifier("usersSchema") XsdSchema usersSchema) {
+        DefaultWsdl11Definition wsdl11Definition = new DefaultWsdl11Definition();
+        wsdl11Definition.setPortTypeName("UserPort");
+        wsdl11Definition.setLocationUri("/ws");
+        wsdl11Definition.setTargetNamespace("http://spring.io/guides/gs-producing-web-service");
+        wsdl11Definition.setSchema(usersSchema);
+        return wsdl11Definition;
+    }
+
+    @Bean("usersSchema")
+    public XsdSchema usersSchema() {
+        return new SimpleXsdSchema(new ClassPathResource("/xsd/user.xsd"));
     }
 
     @Bean

@@ -10,4 +10,5 @@ import java.util.Set;
 public interface UserService {
     User findByLogin(String login);
     Set<User> findAllByLogins(Collection<String> logins);
+    Set<User> getFriends(String login);
 }

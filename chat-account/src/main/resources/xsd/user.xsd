@@ -1,0 +1,27 @@
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://spring.io/guides/gs-producing-web-service"
+           targetNamespace="http://spring.io/guides/gs-producing-web-service" elementFormDefault="qualified">
+
+    <xs:element name="getUserFriendsRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="login" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="getUserFriendsResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="friends" type="tns:UserDTO"
+                            minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="UserDTO">
+        <xs:sequence>
+            <xs:element name="login" type="xs:string"/>
+            <xs:element name="birthDate" type="xs:date"/>
+        </xs:sequence>
+    </xs:complexType>
+</xs:schema>
