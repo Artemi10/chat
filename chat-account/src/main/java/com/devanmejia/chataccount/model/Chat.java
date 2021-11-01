@@ -31,11 +31,15 @@ public class Chat extends BaseEntity {
         if (this == o) return true;
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
         Chat chat = (Chat) o;
-        return Objects.equals(name, chat.name);
+        return name.equals(chat.name);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(name);
+    }
+
+    public Long getId(){
+        return id;
     }
 }

@@ -37,11 +37,15 @@ public class User extends BaseEntity{
         if (this == o) return true;
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
         User user = (User) o;
-        return Objects.equals(login, user.login);
+        return login.equals(user.login);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(login);
+    }
+
+    public Long getId(){
+        return id;
     }
 }

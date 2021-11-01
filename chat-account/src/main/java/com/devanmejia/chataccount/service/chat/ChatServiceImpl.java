@@ -7,8 +7,10 @@ import com.devanmejia.chataccount.repository.ChatRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class ChatServiceImpl implements ChatService{
@@ -17,6 +19,17 @@ public class ChatServiceImpl implements ChatService{
     @Autowired
     public ChatServiceImpl(ChatRepository chatRepository) {
         this.chatRepository = chatRepository;
+    }
+
+    @Override
+    public void deleteUserFromChat(String name, User userToDelete) {
+        Chat chat = findByName(name);
+        if (!userToDelete.equals(chat.getAdmin())){
+            chatRepository.deleteUserFromChat(userToDelete.getId(), chat.getId());
+        }
+        else {
+            throw new EntityException("Can not remove admin from chat");
+        }
     }
 
     @Override
