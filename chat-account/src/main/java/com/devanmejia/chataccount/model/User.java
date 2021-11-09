@@ -1,6 +1,5 @@
 package com.devanmejia.chataccount.model;
 
-import io.spring.guides.gs_producing_web_service.UserDTO;
 import lombok.*;
 import org.hibernate.Hibernate;
 import org.hibernate.annotations.NaturalId;
@@ -45,9 +44,5 @@ public class User extends BaseEntity{
     @Override
     public int hashCode() {
         return Objects.hash(login);
-    }
-
-    public Long getId(){
-        return id;
     }
 }

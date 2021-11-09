@@ -39,12 +39,4 @@ public class Chat extends BaseEntity {
     public int hashCode() {
         return Objects.hash(name);
     }
-
-    public Long getId(){
-        return id;
-    }
-
-    public void setId(Long id){
-        this.id = id;
-    }
 }
