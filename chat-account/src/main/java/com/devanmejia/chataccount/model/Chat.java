@@ -19,7 +19,7 @@ import java.util.Set;
         attributeNodes = @NamedAttributeNode("users"))
 public class Chat extends BaseEntity {
     @NaturalId
-    @Column(name = "name")
+    @Column(name = "name", unique = true)
     private String name;
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "admin_id")

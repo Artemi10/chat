@@ -63,8 +63,7 @@
     </xs:element>
 
     <xs:element name="deleteUserFromChatResponse">
-        <xs:complexType>
-        </xs:complexType>
+        <xs:complexType/>
     </xs:element>
 
     <xs:complexType name="ChatDTO">

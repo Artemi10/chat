@@ -17,8 +17,8 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 public class User extends BaseEntity{
-    @NaturalId
-    @Column(name = "login")
+    @NaturalId(mutable = true)
+    @Column(name = "login", unique = true)
     private String login;
     @Column(name = "birthdate")
     private Date birthDate;

@@ -43,6 +43,15 @@ public class UserController {
     }
 
     @ResponsePayload
+    @PayloadRoot(namespace = NAMESPACE_URI, localPart = "updateUserRequest")
+    public UpdateUserResponse updateUser(@RequestPayload UpdateUserRequest request) {
+        User userToUpdate = userConverter.reconvert(request.getUserToUpdate());
+        UpdateUserResponse response = new UpdateUserResponse();
+        userService.updateUser(userToUpdate);
+        return response;
+    }
+
+    @ResponsePayload
     @PayloadRoot(namespace = NAMESPACE_URI, localPart = "createUserRequest")
     public CreateUserResponse createNewUser(@RequestPayload CreateUserRequest request) {
         User userToCreate = userConverter.reconvert(request.getUserToCreate());
