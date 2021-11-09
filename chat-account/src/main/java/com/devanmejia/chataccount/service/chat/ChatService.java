@@ -9,6 +9,7 @@ import java.util.Set;
 
 @Service
 public interface ChatService {
+    void updateChat(long id, String newName);
     void deleteUserFromChat(String name, User user);
     void addUserToChat(String name, User user);
     Chat createChat(String name, User admin, Set<User> users);

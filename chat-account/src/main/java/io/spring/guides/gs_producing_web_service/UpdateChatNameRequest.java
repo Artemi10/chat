@@ -25,7 +25,8 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="userToCreate" type="{http://spring.io/guides/gs-producing-web-service}UserDTO"/>
+ *         &lt;element name="id" type="{http://www.w3.org/2001/XMLSchema}long"/>
+ *         &lt;element name="newChatName" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -36,36 +37,54 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "userToCreate"
+    "id",
+    "newChatName"
 })
-@XmlRootElement(name = "createUserRequest")
-public class CreateUserRequest {
+@XmlRootElement(name = "updateChatNameRequest")
+public class UpdateChatNameRequest {
 
+    protected long id;
     @XmlElement(required = true)
-    protected UserDTO userToCreate;
+    protected String newChatName;
 
     /**
-     * Gets the value of the userToCreate property.
+     * Gets the value of the id property.
      * 
-     * @return
-     *     possible object is
-     *     {@link UserDTO }
-     *     
      */
-    public UserDTO getUserToCreate() {
-        return userToCreate;
+    public long getId() {
+        return id;
     }
 
     /**
-     * Sets the value of the userToCreate property.
+     * Sets the value of the id property.
+     * 
+     */
+    public void setId(long value) {
+        this.id = value;
+    }
+
+    /**
+     * Gets the value of the newChatName property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getNewChatName() {
+        return newChatName;
+    }
+
+    /**
+     * Sets the value of the newChatName property.
      * 
      * @param value
      *     allowed object is
-     *     {@link UserDTO }
+     *     {@link String }
      *     
      */
-    public void setUserToCreate(UserDTO value) {
-        this.userToCreate = value;
+    public void setNewChatName(String value) {
+        this.newChatName = value;
     }
 
 }

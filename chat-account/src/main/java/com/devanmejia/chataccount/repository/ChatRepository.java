@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,6 +33,11 @@ public interface ChatRepository extends JpaRepository<Chat, Long> {
     @Transactional
     @Query(value = "INSERT INTO chats_users (chat_id, user_id) VALUES (:userId, :chatId)", nativeQuery = true)
     void addUserToChat(Long userId, Long chatId);
+
+    @Modifying
+    @Transactional
+    @Query("UPDATE Chat c SET c.name = :name WHERE c.id = :id")
+    void updateChat(Long id, String name);
 
     boolean existsByName(String name);
     default boolean notExistsByName(String name){

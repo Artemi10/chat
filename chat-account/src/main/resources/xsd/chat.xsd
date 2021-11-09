@@ -62,7 +62,7 @@
         </xs:complexType>
     </xs:element>
 
-    <xs:element name="addUserToChatResponse">
+    <xs:element name="deleteUserFromChatResponse">
         <xs:complexType/>
     </xs:element>
 
@@ -75,8 +75,23 @@
         </xs:complexType>
     </xs:element>
 
-    <xs:element name="deleteUserFromChatResponse">
+    <xs:element name="addUserToChatResponse">
         <xs:complexType/>
+    </xs:element>
+
+    <xs:element name="updateChatNameRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="id" type="xs:long"/>
+                <xs:element name="newChatName" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="updateChatNameResponse">
+        <xs:complexType>
+            <xs:sequence/>
+        </xs:complexType>
     </xs:element>
 
     <xs:complexType name="ChatDTO">

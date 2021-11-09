@@ -60,6 +60,11 @@ public class ChatServiceImpl implements ChatService{
     }
 
     @Override
+    public void updateChat(long id, String newName) {
+        chatRepository.updateChat(id, newName);
+    }
+
+    @Override
     public List<Chat> findByAdminLogin(User admin) {
         return chatRepository.findAllByAdmin(admin);
     }

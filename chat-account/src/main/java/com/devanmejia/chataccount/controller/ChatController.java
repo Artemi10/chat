@@ -74,4 +74,11 @@ public class ChatController {
         chatService.addUserToChat(request.getChatName(), userToAdd);
         return new AddUserToChatResponse();
     }
+
+    @ResponsePayload
+    @PayloadRoot(namespace = NAMESPACE_URI, localPart = "updateChatNameRequest")
+    public UpdateChatNameResponse updateChat(@RequestPayload UpdateChatNameRequest request) {
+        chatService.updateChat(request.getId(), request.getNewChatName());
+        return new UpdateChatNameResponse();
+    }
 }
