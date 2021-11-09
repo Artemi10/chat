@@ -5,6 +5,7 @@ import org.hibernate.Hibernate;
 import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
@@ -24,7 +25,7 @@ public class Chat extends BaseEntity {
     @JoinColumn(name = "admin_id")
     private User admin;
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "chats")
-    private Set<User> users;
+    private Set<User> users = new HashSet<>();
 
     @Override
     public boolean equals(Object o) {
