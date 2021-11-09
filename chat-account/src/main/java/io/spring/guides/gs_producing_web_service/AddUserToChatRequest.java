@@ -26,6 +26,7 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *         &lt;element name="chatName" type="{http://www.w3.org/2001/XMLSchema}string"/>
+ *         &lt;element name="userName" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -36,13 +37,16 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "chatName"
+    "chatName",
+    "userName"
 })
-@XmlRootElement(name = "getChatByNameRequest")
-public class GetChatByNameRequest {
+@XmlRootElement(name = "addUserToChatRequest")
+public class AddUserToChatRequest {
 
     @XmlElement(required = true)
     protected String chatName;
+    @XmlElement(required = true)
+    protected String userName;
 
     /**
      * Gets the value of the chatName property.
@@ -66,6 +70,30 @@ public class GetChatByNameRequest {
      */
     public void setChatName(String value) {
         this.chatName = value;
+    }
+
+    /**
+     * Gets the value of the userName property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getUserName() {
+        return userName;
+    }
+
+    /**
+     * Sets the value of the userName property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setUserName(String value) {
+        this.userName = value;
     }
 
 }

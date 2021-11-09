@@ -28,6 +28,11 @@ public interface ChatRepository extends JpaRepository<Chat, Long> {
     @Query(value = "DELETE FROM chats_users WHERE user_id = :userId AND chat_id = :chatId", nativeQuery = true)
     void deleteUserFromChat(Long userId, Long chatId);
 
+    @Modifying
+    @Transactional
+    @Query(value = "INSERT INTO chats_users (chat_id, user_id) VALUES (:userId, :chatId)", nativeQuery = true)
+    void addUserToChat(Long userId, Long chatId);
+
     boolean existsByName(String name);
     default boolean notExistsByName(String name){
         return !existsByName(name);

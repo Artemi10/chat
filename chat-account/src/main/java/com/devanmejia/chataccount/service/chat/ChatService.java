@@ -10,6 +10,7 @@ import java.util.Set;
 @Service
 public interface ChatService {
     void deleteUserFromChat(String name, User user);
+    void addUserToChat(String name, User user);
     Chat createChat(String name, User admin, Set<User> users);
     Chat findByName(String name);
     List<Chat> findByAdminLogin(User admin);

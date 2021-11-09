@@ -10,7 +10,6 @@ package io.spring.guides.gs_producing_web_service;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
@@ -24,9 +23,6 @@ import javax.xml.bind.annotation.XmlType;
  * &lt;complexType>
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;sequence>
- *         &lt;element name="chatName" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -35,37 +31,9 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "", propOrder = {
-    "chatName"
-})
-@XmlRootElement(name = "getChatByNameRequest")
-public class GetChatByNameRequest {
+@XmlType(name = "")
+@XmlRootElement(name = "addUserToChatResponse")
+public class AddUserToChatResponse {
 
-    @XmlElement(required = true)
-    protected String chatName;
-
-    /**
-     * Gets the value of the chatName property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getChatName() {
-        return chatName;
-    }
-
-    /**
-     * Sets the value of the chatName property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setChatName(String value) {
-        this.chatName = value;
-    }
 
 }

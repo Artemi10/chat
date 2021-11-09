@@ -31,6 +31,17 @@ public class ChatServiceImpl implements ChatService{
     }
 
     @Override
+    public void addUserToChat(String name, User user) {
+        Chat chat = findByName(name);
+        if (!chat.getUsers().contains(user)){
+            chatRepository.addUserToChat(chat.getId(), user.getId());
+        }
+        else {
+            throw new EntityException(String.format("%s has already been added", user.getLogin()));
+        }
+    }
+
+    @Override
     public Chat createChat(String name, User admin, Set<User> users) {
         if (chatRepository.notExistsByName(name)){
             users.add(admin);

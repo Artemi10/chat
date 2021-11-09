@@ -61,9 +61,17 @@ public class ChatController {
 
     @ResponsePayload
     @PayloadRoot(namespace = NAMESPACE_URI, localPart = "deleteUserFromChatRequest")
-    public DeleteUserFromChatResponse createChat(@RequestPayload DeleteUserFromChatRequest request) {
+    public DeleteUserFromChatResponse deleteUserFromChat(@RequestPayload DeleteUserFromChatRequest request) {
        User userToDelete = userService.findByLogin(request.getUserName());
        chatService.deleteUserFromChat(request.getChatName(), userToDelete);
        return new DeleteUserFromChatResponse();
+    }
+
+    @ResponsePayload
+    @PayloadRoot(namespace = NAMESPACE_URI, localPart = "addUserToChatRequest")
+    public AddUserToChatResponse addUserToChat(@RequestPayload AddUserToChatRequest request) {
+        User userToAdd = userService.findByLogin(request.getUserName());
+        chatService.addUserToChat(request.getChatName(), userToAdd);
+        return new AddUserToChatResponse();
     }
 }
