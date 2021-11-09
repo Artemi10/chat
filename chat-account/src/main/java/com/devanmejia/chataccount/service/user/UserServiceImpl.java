@@ -40,11 +40,33 @@ public class UserServiceImpl implements UserService {
     @Override
     public User createNewUser(User userToCreate) {
         String login = userToCreate.getLogin();
-        if (!userRepository.existsByLogin(login)){
-            return userRepository.save(userToCreate);
+        if (userToCreate.isNew()){
+            if (!userRepository.existsByLogin(login)){
+                return userRepository.save(userToCreate);
+            }
+            else {
+                throw new EntityException(String.format("%s has already been registered", login));
+            }
         }
         else {
-            throw new EntityException(String.format("%s has already been registered", login));
+            throw new EntityException("User has already been registered");
+        }
+    }
+
+    @Override
+    public void updateUser(User userToUpdate) {
+        String login = userToUpdate.getLogin();
+        if (!userToUpdate.isNew()){
+            if (!userRepository.existsByLogin(login)){
+                userRepository.updateUser(userToUpdate.getId(),
+                        userToUpdate.getLogin(), userToUpdate.getBirthDate());
+            }
+            else {
+                throw new EntityException(String.format("%s has already been registered", login));
+            }
+        }
+        else {
+            throw new EntityException("Can not update user. Id is not specified");
         }
     }
 }

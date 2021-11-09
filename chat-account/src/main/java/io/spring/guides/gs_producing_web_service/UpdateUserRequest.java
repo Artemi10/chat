@@ -25,7 +25,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="chat" type="{http://spring.io/guides/gs-producing-web-service}ChatDTO"/>
+ *         &lt;element name="userToUpdate" type="{http://spring.io/guides/gs-producing-web-service}UserDTO"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -36,36 +36,36 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "chat"
+    "userToUpdate"
 })
-@XmlRootElement(name = "createChatResponse")
-public class CreateChatResponse {
+@XmlRootElement(name = "updateUserRequest")
+public class UpdateUserRequest {
 
     @XmlElement(required = true)
-    protected ChatDTO chat;
+    protected UserDTO userToUpdate;
 
     /**
-     * Gets the value of the chat property.
+     * Gets the value of the userToUpdate property.
      * 
      * @return
      *     possible object is
-     *     {@link ChatDTO }
+     *     {@link UserDTO }
      *     
      */
-    public ChatDTO getChat() {
-        return chat;
+    public UserDTO getUserToUpdate() {
+        return userToUpdate;
     }
 
     /**
-     * Sets the value of the chat property.
+     * Sets the value of the userToUpdate property.
      * 
      * @param value
      *     allowed object is
-     *     {@link ChatDTO }
+     *     {@link UserDTO }
      *     
      */
-    public void setChat(ChatDTO value) {
-        this.chat = value;
+    public void setUserToUpdate(UserDTO value) {
+        this.userToUpdate = value;
     }
 
 }

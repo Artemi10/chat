@@ -10,7 +10,6 @@ package io.spring.guides.gs_producing_web_service;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
@@ -24,9 +23,6 @@ import javax.xml.bind.annotation.XmlType;
  * &lt;complexType>
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;sequence>
- *         &lt;element name="chat" type="{http://spring.io/guides/gs-producing-web-service}ChatDTO"/>
- *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -35,37 +31,9 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "", propOrder = {
-    "chat"
-})
-@XmlRootElement(name = "createChatResponse")
-public class CreateChatResponse {
+@XmlType(name = "")
+@XmlRootElement(name = "updateUserResponse")
+public class UpdateUserResponse {
 
-    @XmlElement(required = true)
-    protected ChatDTO chat;
-
-    /**
-     * Gets the value of the chat property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link ChatDTO }
-     *     
-     */
-    public ChatDTO getChat() {
-        return chat;
-    }
-
-    /**
-     * Sets the value of the chat property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link ChatDTO }
-     *     
-     */
-    public void setChat(ChatDTO value) {
-        this.chat = value;
-    }
 
 }
