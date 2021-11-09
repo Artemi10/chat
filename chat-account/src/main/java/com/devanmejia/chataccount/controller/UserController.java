@@ -34,6 +34,15 @@ public class UserController {
     }
 
     @ResponsePayload
+    @PayloadRoot(namespace = NAMESPACE_URI, localPart = "getUserByLoginRequest")
+    public GetUserByLoginResponse getUserByLogin(@RequestPayload GetUserByLoginRequest request) {
+        GetUserByLoginResponse response = new GetUserByLoginResponse();
+        User user = userService.findByLogin(request.getLogin());
+        response.setUser(userConverter.convert(user));
+        return response;
+    }
+
+    @ResponsePayload
     @PayloadRoot(namespace = NAMESPACE_URI, localPart = "createUserRequest")
     public CreateUserResponse createNewUser(@RequestPayload CreateUserRequest request) {
         User userToCreate = userConverter.reconvert(request.getUserToCreate());
