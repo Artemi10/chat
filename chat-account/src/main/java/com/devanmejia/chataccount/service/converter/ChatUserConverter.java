@@ -20,6 +20,7 @@ public class ChatUserConverter implements Converter<ChatUserDTO, User> {
     @Override
     public ChatUserDTO convert(User user) {
         ChatUserDTO chatUserDTO = new ChatUserDTO();
+        chatUserDTO.setId(user.getId());
         chatUserDTO.setLogin(user.getLogin());
         chatUserDTO.setBirthDate(dateConverter.convert(user.getBirthDate()));
         return chatUserDTO;
@@ -28,6 +29,7 @@ public class ChatUserConverter implements Converter<ChatUserDTO, User> {
     @Override
     public User reconvert(ChatUserDTO obj) {
         User user = new User();
+        user.setId(obj.getId());
         user.setLogin(obj.getLogin());
         user.setBirthDate(dateConverter.reconvert(obj.getBirthDate()));
         return user;

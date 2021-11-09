@@ -69,6 +69,7 @@
 
     <xs:complexType name="ChatDTO">
         <xs:sequence>
+            <xs:element name="id" type="xs:long" nillable="true"/>
             <xs:element name="name" type="xs:string"/>
             <xs:element name="admin" type="tns:ChatUserDTO"/>
             <xs:element name="users" type="tns:ChatUserDTO"
@@ -78,6 +79,7 @@
 
     <xs:complexType name="ChatUserDTO">
         <xs:sequence>
+            <xs:element name="id" type="xs:long" nillable="true"/>
             <xs:element name="login" type="xs:string"/>
             <xs:element name="birthDate" type="xs:date"/>
         </xs:sequence>

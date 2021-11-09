@@ -20,6 +20,7 @@ public class UserConverter implements Converter<UserDTO, User> {
     @Override
     public UserDTO convert(User user) {
         UserDTO userDTO = new UserDTO();
+        userDTO.setId(user.getId());
         userDTO.setLogin(user.getLogin());
         userDTO.setBirthDate(dateConverter.convert(user.getBirthDate()));
         return userDTO;
@@ -28,6 +29,7 @@ public class UserConverter implements Converter<UserDTO, User> {
     @Override
     public User reconvert(UserDTO obj) {
         User user = new User();
+        user.setId(obj.getId());
         user.setLogin(obj.getLogin());
         user.setBirthDate(dateConverter.reconvert(obj.getBirthDate()));
         return user;

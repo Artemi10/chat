@@ -34,6 +34,22 @@
         </xs:complexType>
     </xs:element>
 
+    <xs:element name="updateUserRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="userToUpdate" type="tns:UserDTO"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="updateUserResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="updatedUser" type="tns:UserDTO"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
     <xs:element name="createUserRequest">
         <xs:complexType>
             <xs:sequence>
@@ -52,6 +68,7 @@
 
     <xs:complexType name="UserDTO">
         <xs:sequence>
+            <xs:element name="id" type="xs:long" nillable="true"/>
             <xs:element name="login" type="xs:string"/>
             <xs:element name="birthDate" type="xs:date"/>
         </xs:sequence>

@@ -21,6 +21,7 @@ public class ChatConverter implements Converter<ChatDTO, Chat>{
     @Override
     public ChatDTO convert(Chat chat) {
         ChatDTO chatDTO = new ChatDTO();
+        chatDTO.setId(chat.getId());
         chatDTO.setName(chat.getName());
         chatDTO.setAdmin(chatUserConverter.convert(chat.getAdmin()));
         chatDTO.getUsers()
@@ -31,6 +32,7 @@ public class ChatConverter implements Converter<ChatDTO, Chat>{
     @Override
     public Chat reconvert(ChatDTO obj) {
         Chat chat = new Chat();
+        chat.setId(obj.getId());
         chat.setName(obj.getName());
         chat.setAdmin(chatUserConverter.reconvert(obj.getAdmin()));
         chat.setUsers(new HashSet<>(chatUserConverter.reconvert(obj.getUsers())));
