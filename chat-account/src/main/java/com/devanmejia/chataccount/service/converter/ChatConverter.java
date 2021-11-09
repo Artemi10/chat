@@ -7,6 +7,8 @@ import io.spring.guides.gs_producing_web_service.ChatUserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
+
 @Service("chatConverter")
 public class ChatConverter implements Converter<ChatDTO, Chat>{
     private final Converter<ChatUserDTO, User> chatUserConverter;
@@ -24,5 +26,14 @@ public class ChatConverter implements Converter<ChatDTO, Chat>{
         chatDTO.getUsers()
                 .addAll(chatUserConverter.convert(chat.getUsers()));
         return chatDTO;
+    }
+
+    @Override
+    public Chat reconvert(ChatDTO obj) {
+        Chat chat = new Chat();
+        chat.setName(obj.getName());
+        chat.setAdmin(chatUserConverter.reconvert(obj.getAdmin()));
+        chat.setUsers(new HashSet<>(chatUserConverter.reconvert(obj.getUsers())));
+        return chat;
     }
 }

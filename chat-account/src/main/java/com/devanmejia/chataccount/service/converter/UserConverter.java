@@ -24,4 +24,12 @@ public class UserConverter implements Converter<UserDTO, User> {
         userDTO.setBirthDate(dateConverter.convert(user.getBirthDate()));
         return userDTO;
     }
+
+    @Override
+    public User reconvert(UserDTO obj) {
+        User user = new User();
+        user.setLogin(obj.getLogin());
+        user.setBirthDate(dateConverter.reconvert(obj.getBirthDate()));
+        return user;
+    }
 }

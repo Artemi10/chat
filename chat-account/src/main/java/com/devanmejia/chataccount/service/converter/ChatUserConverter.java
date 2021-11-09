@@ -24,4 +24,12 @@ public class ChatUserConverter implements Converter<ChatUserDTO, User> {
         chatUserDTO.setBirthDate(dateConverter.convert(user.getBirthDate()));
         return chatUserDTO;
     }
+
+    @Override
+    public User reconvert(ChatUserDTO obj) {
+        User user = new User();
+        user.setLogin(obj.getLogin());
+        user.setBirthDate(dateConverter.reconvert(obj.getBirthDate()));
+        return user;
+    }
 }

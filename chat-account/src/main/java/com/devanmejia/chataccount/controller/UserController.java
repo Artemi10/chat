@@ -32,4 +32,14 @@ public class UserController {
         response.getFriends().addAll(userConverter.convert(friends));
         return response;
     }
+
+    @ResponsePayload
+    @PayloadRoot(namespace = NAMESPACE_URI, localPart = "createUserRequest")
+    public CreateUserResponse createNewUser(@RequestPayload CreateUserRequest request) {
+        User userToCreate = userConverter.reconvert(request.getUserToCreate());
+        User createdUser = userService.createNewUser(userToCreate);
+        CreateUserResponse response = new CreateUserResponse();
+        response.setCreatedUser(userConverter.convert(createdUser));
+        return response;
+    }
 }
