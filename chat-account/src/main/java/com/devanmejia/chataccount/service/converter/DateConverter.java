@@ -11,6 +11,7 @@ import java.util.GregorianCalendar;
 
 @Service("dateConverter")
 public class DateConverter implements Converter<XMLGregorianCalendar, Date> {
+
     @Override
     public XMLGregorianCalendar convert(Date date) {
         GregorianCalendar calendar = new GregorianCalendar();
@@ -20,5 +21,10 @@ public class DateConverter implements Converter<XMLGregorianCalendar, Date> {
         } catch (DatatypeConfigurationException e){
             throw new ConverterException("Invalid date");
         }
+    }
+
+    @Override
+    public Date reconvert(XMLGregorianCalendar obj) {
+        return obj.toGregorianCalendar().getTime();
     }
 }

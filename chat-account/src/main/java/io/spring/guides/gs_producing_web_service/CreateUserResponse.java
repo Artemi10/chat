@@ -8,10 +8,9 @@
 
 package io.spring.guides.gs_producing_web_service;
 
-import java.util.ArrayList;
-import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
@@ -26,7 +25,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="chats" type="{http://spring.io/guides/gs-producing-web-service}ChatDTO" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="createdUser" type="{http://spring.io/guides/gs-producing-web-service}UserDTO"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -37,40 +36,36 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "chats"
+    "createdUser"
 })
-@XmlRootElement(name = "getChatsByAdminNameResponse")
-public class GetChatsByAdminNameResponse {
+@XmlRootElement(name = "createUserResponse")
+public class CreateUserResponse {
 
-    protected List<ChatDTO> chats;
+    @XmlElement(required = true)
+    protected UserDTO createdUser;
 
     /**
-     * Gets the value of the chats property.
+     * Gets the value of the createdUser property.
      * 
-     * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the chats property.
-     * 
-     * <p>
-     * For example, to add a new item, do as follows:
-     * <pre>
-     *    getChats().add(newItem);
-     * </pre>
-     * 
-     * 
-     * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link ChatDTO }
-     * 
-     * 
+     * @return
+     *     possible object is
+     *     {@link UserDTO }
+     *     
      */
-    public List<ChatDTO> getChats() {
-        if (chats == null) {
-            chats = new ArrayList<ChatDTO>();
-        }
-        return this.chats;
+    public UserDTO getCreatedUser() {
+        return createdUser;
+    }
+
+    /**
+     * Sets the value of the createdUser property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link UserDTO }
+     *     
+     */
+    public void setCreatedUser(UserDTO value) {
+        this.createdUser = value;
     }
 
 }

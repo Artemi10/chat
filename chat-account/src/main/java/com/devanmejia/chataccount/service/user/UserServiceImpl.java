@@ -36,4 +36,15 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new EntityException(String.format("User %s not found", login)))
                 .getFriends();
     }
+
+    @Override
+    public User createNewUser(User userToCreate) {
+        String login = userToCreate.getLogin();
+        if (!userRepository.existsByLogin(login)){
+            return userRepository.save(userToCreate);
+        }
+        else {
+            throw new EntityException(String.format("%s has already been registered", login));
+        }
+    }
 }

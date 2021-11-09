@@ -13,4 +13,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
             "WHERE user.login = :login")
     Optional<User> findByLoginWithFriends(String login);
     Optional<User> findByLogin(String login);
+    boolean existsByLogin(String login);
 }

@@ -17,12 +17,12 @@ import javax.xml.datatype.XMLGregorianCalendar;
 
 
 /**
- * <p>Java class for ChatUserDTO complex type.
+ * <p>Java class for UserDTO complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="ChatUserDTO">
+ * &lt;complexType name="UserDTO">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
@@ -37,11 +37,11 @@ import javax.xml.datatype.XMLGregorianCalendar;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "ChatUserDTO", propOrder = {
+@XmlType(name = "UserDTO", propOrder = {
     "login",
     "birthDate"
 })
-public class ChatUserDTO {
+public class UserDTO {
 
     @XmlElement(required = true)
     protected String login;
