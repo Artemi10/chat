@@ -1,5 +1,6 @@
 package com.devanmejia.chataccount.controller;
 
+import com.devanmejia.chataccount.config.security.authentication.AuthenticationFacade;
 import com.devanmejia.chataccount.model.Chat;
 import com.devanmejia.chataccount.model.User;
 import com.devanmejia.chataccount.service.chat.ChatService;
@@ -7,6 +8,7 @@ import com.devanmejia.chataccount.service.converter.Converter;
 import com.devanmejia.chataccount.service.user.UserService;
 import io.spring.guides.gs_producing_web_service.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.ws.server.endpoint.annotation.Endpoint;
 import org.springframework.ws.server.endpoint.annotation.PayloadRoot;
 import org.springframework.ws.server.endpoint.annotation.RequestPayload;
@@ -21,12 +23,15 @@ public class ChatController {
     private final ChatService chatService;
     private final UserService userService;
     private final Converter<ChatDTO, Chat> chatConverter;
+    private final Authentication authentication;
 
     @Autowired
-    public ChatController(ChatService chatService, UserService userService, Converter<ChatDTO, Chat> chatConverter) {
+    public ChatController(ChatService chatService, UserService userService,
+                          Converter<ChatDTO, Chat> chatConverter, AuthenticationFacade authenticationFacade) {
         this.chatService = chatService;
         this.userService = userService;
         this.chatConverter = chatConverter;
+        this.authentication = authenticationFacade.getAuthentication();
     }
 
     @ResponsePayload
