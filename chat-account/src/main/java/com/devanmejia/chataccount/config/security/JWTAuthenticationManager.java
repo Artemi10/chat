@@ -1,7 +1,7 @@
 package com.devanmejia.chataccount.config.security;
 
 import com.devanmejia.chataccount.exception.AuthException;
-import com.devanmejia.chataccount.service.user_details.UserDetailsService;
+import com.devanmejia.chataccount.config.security.user_details.UserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;

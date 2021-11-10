@@ -1,4 +1,4 @@
-package com.devanmejia.chataccount.service.user_details;
+package com.devanmejia.chataccount.config.security.user_details;
 
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;

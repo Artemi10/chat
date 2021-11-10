@@ -1,6 +1,8 @@
 package com.devanmejia.chataccount.controller;
 
-import com.devanmejia.chataccount.config.security.authentication.AuthenticationFacade;
+import com.devanmejia.chataccount.config.security.auth_users.AuthUserState;
+import com.devanmejia.chataccount.config.security.authentication.AuthService;
+import com.devanmejia.chataccount.exception.AuthException;
 import com.devanmejia.chataccount.model.Chat;
 import com.devanmejia.chataccount.model.User;
 import com.devanmejia.chataccount.service.chat.ChatService;
@@ -23,24 +25,30 @@ public class ChatController {
     private final ChatService chatService;
     private final UserService userService;
     private final Converter<ChatDTO, Chat> chatConverter;
-    private final Authentication authentication;
+    private final AuthService authService;
 
     @Autowired
     public ChatController(ChatService chatService, UserService userService,
-                          Converter<ChatDTO, Chat> chatConverter, AuthenticationFacade authenticationFacade) {
+                          Converter<ChatDTO, Chat> chatConverter, AuthService authService) {
         this.chatService = chatService;
         this.userService = userService;
         this.chatConverter = chatConverter;
-        this.authentication = authenticationFacade.getAuthentication();
+        this.authService = authService;
     }
 
     @ResponsePayload
     @PayloadRoot(namespace = NAMESPACE_URI, localPart = "getChatByNameRequest")
     public GetChatByNameResponse getChatByName(@RequestPayload GetChatByNameRequest request) {
-        Chat chat = chatService.findByName(request.getChatName());
-        GetChatByNameResponse response = new GetChatByNameResponse();
-        response.setChat(chatConverter.convert(chat));
-        return response;
+        if (authService.hasPermission(AuthUserState.ACTIVE)){
+            String login = authService.getUserName();
+            Chat chat = chatService.findByName(request.getChatName());
+            if (chatService.isUserContains(login, chat)){
+                GetChatByNameResponse response = new GetChatByNameResponse();
+                response.setChat(chatConverter.convert(chat));
+                return response;
+            }
+        }
+        throw new AuthException("Not permit");
     }
 
     @ResponsePayload

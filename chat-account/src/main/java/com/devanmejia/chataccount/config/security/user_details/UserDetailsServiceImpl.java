@@ -1,7 +1,7 @@
-package com.devanmejia.chataccount.service.user_details;
+package com.devanmejia.chataccount.config.security.user_details;
 
 import com.devanmejia.chataccount.exception.AuthException;
-import com.devanmejia.chataccount.service.crypto.CryptoService;
+import com.devanmejia.chataccount.config.security.crypto.CryptoService;
 import com.devanmejia.chataccount.transfer.AuthenticationDTO;
 import com.devanmejia.chataccount.transfer.TokenDTO;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -68,4 +68,12 @@ public class ChatServiceImpl implements ChatService{
     public List<Chat> findByAdminLogin(User admin) {
         return chatRepository.findAllByAdmin(admin);
     }
+
+    @Override
+    public boolean isUserContains(String login, Chat chat) {
+        return chat.getAdmin().getLogin().equals(login)
+                || chat.getUsers().stream()
+                .map(User::getLogin)
+                .anyMatch(userLogin -> userLogin.equals(login));
+    }
 }

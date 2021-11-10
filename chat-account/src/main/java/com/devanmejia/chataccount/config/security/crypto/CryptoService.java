@@ -1,4 +1,4 @@
-package com.devanmejia.chataccount.service.crypto;
+package com.devanmejia.chataccount.config.security.crypto;
 
 import com.devanmejia.chataccount.transfer.AuthenticationDTO;
 import org.springframework.security.core.userdetails.UserDetails;
