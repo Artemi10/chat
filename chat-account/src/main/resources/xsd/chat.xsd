@@ -18,11 +18,7 @@
     </xs:element>
 
     <xs:element name="getChatsByAdminNameRequest">
-        <xs:complexType>
-            <xs:sequence>
-                <xs:element name="adminName" type="xs:string"/>
-            </xs:sequence>
-        </xs:complexType>
+        <xs:complexType/>
     </xs:element>
 
     <xs:element name="getChatsByAdminNameResponse">

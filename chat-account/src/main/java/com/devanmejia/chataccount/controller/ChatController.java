@@ -10,7 +10,6 @@ import com.devanmejia.chataccount.service.converter.Converter;
 import com.devanmejia.chataccount.service.user.UserService;
 import io.spring.guides.gs_producing_web_service.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
 import org.springframework.ws.server.endpoint.annotation.Endpoint;
 import org.springframework.ws.server.endpoint.annotation.PayloadRoot;
 import org.springframework.ws.server.endpoint.annotation.RequestPayload;
@@ -54,11 +53,14 @@ public class ChatController {
     @ResponsePayload
     @PayloadRoot(namespace = NAMESPACE_URI, localPart = "getChatsByAdminNameRequest")
     public GetChatsByAdminNameResponse getChatsByAdminName(@RequestPayload GetChatsByAdminNameRequest request) {
-        User admin = userService.findByLogin(request.getAdminName());
-        List<Chat> chats = chatService.findByAdminLogin(admin);
-        GetChatsByAdminNameResponse response = new GetChatsByAdminNameResponse();
-        response.getChats().addAll(chatConverter.convert(chats));
-        return response;
+        if (authService.hasPermission(AuthUserState.ACTIVE)){
+            User admin = userService.findByLogin(authService.getUserName());
+            List<Chat> chats = chatService.findByAdmin(admin);
+            GetChatsByAdminNameResponse response = new GetChatsByAdminNameResponse();
+            response.getChats().addAll(chatConverter.convert(chats));
+            return response;
+        }
+        throw new AuthException("Not permit");
     }
 
     @ResponsePayload

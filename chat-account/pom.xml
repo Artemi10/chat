@@ -54,9 +54,9 @@
             <optional>true</optional>
         </dependency>
         <dependency>
-            <groupId>com.sun.xml.wss</groupId>
-            <artifactId>xws-security</artifactId>
-            <version>3.0</version>
+            <groupId>org.springframework.ws</groupId>
+            <artifactId>spring-ws-security</artifactId>
+            <version>3.1.1</version>
         </dependency>
     </dependencies>
 

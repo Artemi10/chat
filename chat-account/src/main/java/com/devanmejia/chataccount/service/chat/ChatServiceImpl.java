@@ -65,7 +65,7 @@ public class ChatServiceImpl implements ChatService{
     }
 
     @Override
-    public List<Chat> findByAdminLogin(User admin) {
+    public List<Chat> findByAdmin(User admin) {
         return chatRepository.findAllByAdmin(admin);
     }
 
