@@ -1,7 +1,9 @@
 package com.devanmejia.chataccount.service.crypto;
 
+import com.devanmejia.chataccount.config.security.auth_users.AuthUser;
 import com.devanmejia.chataccount.exception.AuthException;
 import com.devanmejia.chataccount.transfer.AuthenticationDTO;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -9,10 +11,7 @@ import javax.annotation.PostConstruct;
 import javax.crypto.*;
 import javax.crypto.spec.SecretKeySpec;
 import javax.xml.bind.DatatypeConverter;
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectInputStream;
 import java.security.*;
 
 @Service
@@ -91,9 +90,9 @@ public class CryptoServiceImpl implements CryptoService{
 
     private UserDetails deserializeUserDetails(byte[] byteArray){
         try {
-            ObjectInput input = new ObjectInputStream(new ByteArrayInputStream(byteArray));
-            return (UserDetails) input.readObject();
-        } catch (IOException | ClassNotFoundException e) {
+            ObjectMapper mapper = new ObjectMapper();
+            return mapper.readValue(new String(byteArray), AuthUser.class);
+        } catch (IOException e) {
             String msg = String.format("Problem with deserialization. %s", e.getMessage());
             throw new AuthException(msg);
         }
