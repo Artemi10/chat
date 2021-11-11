@@ -30,7 +30,7 @@ spring:
           uri: lb://email-service
           predicates:
             - Path=/api/email/**
-        - id: email-service
+        - id: account-service
           uri: lb://account-service
           predicates:
             - Path=/api/account/**
