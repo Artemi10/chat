@@ -16,4 +16,5 @@ public interface ChatService {
     Chat findByName(String name);
     List<Chat> findByAdmin(User admin);
     boolean isUserContains(String login, Chat chat);
+    boolean isUserAdmin(String login, Chat chat);
 }

@@ -76,4 +76,9 @@ public class ChatServiceImpl implements ChatService{
                 .map(User::getLogin)
                 .anyMatch(userLogin -> userLogin.equals(login));
     }
+
+    @Override
+    public boolean isUserAdmin(String login, Chat chat) {
+        return chat.getAdmin().getLogin().equals(login);
+    }
 }

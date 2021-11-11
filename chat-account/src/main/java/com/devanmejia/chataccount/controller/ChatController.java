@@ -52,7 +52,7 @@ public class ChatController {
 
     @ResponsePayload
     @PayloadRoot(namespace = NAMESPACE_URI, localPart = "getChatsByAdminNameRequest")
-    public GetChatsByAdminNameResponse getChatsByAdminName(@RequestPayload GetChatsByAdminNameRequest request) {
+    public GetChatsByAdminNameResponse getChatsByAdminName() {
         if (authService.hasPermission(AuthUserState.ACTIVE)){
             User admin = userService.findByLogin(authService.getUserName());
             List<Chat> chats = chatService.findByAdmin(admin);
@@ -66,34 +66,54 @@ public class ChatController {
     @ResponsePayload
     @PayloadRoot(namespace = NAMESPACE_URI, localPart = "createChatRequest")
     public CreateChatResponse createChat(@RequestPayload CreateChatRequest request) {
-        User admin = userService.findByLogin(request.getAdminName());
-        Set<User> users = userService.findAllByLogins(request.getUserNames());
-        Chat chat = chatService.createChat(request.getChatName(), admin, users);
-        CreateChatResponse response = new CreateChatResponse();
-        response.setChat(chatConverter.convert(chat));
-        return response;
+        if (authService.hasPermission(AuthUserState.ACTIVE)){
+            User admin = userService.findByLogin(authService.getUserName());
+            Set<User> users = userService.findAllByLogins(request.getUserNames());
+            Chat chat = chatService.createChat(request.getChatName(), admin, users);
+            CreateChatResponse response = new CreateChatResponse();
+            response.setChat(chatConverter.convert(chat));
+            return response;
+        }
+        throw new AuthException("Not permit");
     }
 
     @ResponsePayload
     @PayloadRoot(namespace = NAMESPACE_URI, localPart = "deleteUserFromChatRequest")
     public DeleteUserFromChatResponse deleteUserFromChat(@RequestPayload DeleteUserFromChatRequest request) {
-       User userToDelete = userService.findByLogin(request.getUserName());
-       chatService.deleteUserFromChat(request.getChatName(), userToDelete);
-       return new DeleteUserFromChatResponse();
+        if (authService.hasPermission(AuthUserState.ACTIVE)){
+            String login = authService.getUserName();
+            Chat chat = chatService.findByName(request.getChatName());
+            if (chatService.isUserAdmin(login, chat)) {
+                User userToDelete = userService.findByLogin(request.getUserName());
+                chatService.deleteUserFromChat(request.getChatName(), userToDelete);
+                return new DeleteUserFromChatResponse();
+            }
+        }
+        throw new AuthException("Not permit");
     }
 
     @ResponsePayload
     @PayloadRoot(namespace = NAMESPACE_URI, localPart = "addUserToChatRequest")
     public AddUserToChatResponse addUserToChat(@RequestPayload AddUserToChatRequest request) {
-        User userToAdd = userService.findByLogin(request.getUserName());
-        chatService.addUserToChat(request.getChatName(), userToAdd);
-        return new AddUserToChatResponse();
+        if (authService.hasPermission(AuthUserState.ACTIVE)) {
+            String login = authService.getUserName();
+            Chat chat = chatService.findByName(request.getChatName());
+            if (chatService.isUserAdmin(login, chat)) {
+                User userToAdd = userService.findByLogin(request.getUserName());
+                chatService.addUserToChat(request.getChatName(), userToAdd);
+                return new AddUserToChatResponse();
+            }
+        }
+        throw new AuthException("Not permit");
     }
 
     @ResponsePayload
     @PayloadRoot(namespace = NAMESPACE_URI, localPart = "updateChatNameRequest")
     public UpdateChatNameResponse updateChat(@RequestPayload UpdateChatNameRequest request) {
-        chatService.updateChat(request.getId(), request.getNewChatName());
-        return new UpdateChatNameResponse();
+        if (authService.hasPermission(AuthUserState.ACTIVE)) {
+            chatService.updateChat(request.getId(), request.getNewChatName());
+            return new UpdateChatNameResponse();
+        }
+        throw new AuthException("Not permit");
     }
 }

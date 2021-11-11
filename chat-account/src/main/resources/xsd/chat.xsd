@@ -34,7 +34,6 @@
         <xs:complexType>
             <xs:sequence>
                 <xs:element name="chatName" type="xs:string"/>
-                <xs:element name="adminName" type="xs:string"/>
                 <xs:element name="userNames" type="xs:string"
                             minOccurs="0" maxOccurs="unbounded"/>
             </xs:sequence>

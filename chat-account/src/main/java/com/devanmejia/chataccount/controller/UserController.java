@@ -1,5 +1,8 @@
 package com.devanmejia.chataccount.controller;
 
+import com.devanmejia.chataccount.config.security.auth_users.AuthUserState;
+import com.devanmejia.chataccount.config.security.authentication.AuthService;
+import com.devanmejia.chataccount.exception.AuthException;
 import com.devanmejia.chataccount.model.User;
 import com.devanmejia.chataccount.service.converter.Converter;
 import com.devanmejia.chataccount.service.user.UserService;
@@ -16,48 +19,69 @@ import java.util.Set;
 public class UserController {
     private static final String NAMESPACE_URI = "http://spring.io/guides/gs-producing-web-service";
     private final UserService userService;
+    private final AuthService authService;
     private final Converter<UserDTO, User> userConverter;
 
     @Autowired
-    public UserController(UserService userService, Converter<UserDTO, User> userConverter) {
+    public UserController(UserService userService, AuthService authService,
+                          Converter<UserDTO, User> userConverter) {
         this.userService = userService;
+        this.authService = authService;
         this.userConverter = userConverter;
     }
 
     @ResponsePayload
     @PayloadRoot(namespace = NAMESPACE_URI, localPart = "getUserFriendsRequest")
-    public GetUserFriendsResponse getUserFriends(@RequestPayload GetUserFriendsRequest request) {
-        Set<User> friends = userService.getFriends(request.getLogin());
-        GetUserFriendsResponse response = new GetUserFriendsResponse();
-        response.getFriends().addAll(userConverter.convert(friends));
-        return response;
+    public GetUserFriendsResponse getUserFriends() {
+        if (authService.hasPermission(AuthUserState.ACTIVE)){
+            Set<User> friends = userService.getFriends(authService.getUserName());
+            GetUserFriendsResponse response = new GetUserFriendsResponse();
+            response.getFriends().addAll(userConverter.convert(friends));
+            return response;
+        }
+        throw new AuthException("Not permit");
     }
 
     @ResponsePayload
     @PayloadRoot(namespace = NAMESPACE_URI, localPart = "getUserByLoginRequest")
-    public GetUserByLoginResponse getUserByLogin(@RequestPayload GetUserByLoginRequest request) {
-        GetUserByLoginResponse response = new GetUserByLoginResponse();
-        User user = userService.findByLogin(request.getLogin());
-        response.setUser(userConverter.convert(user));
-        return response;
+    public GetUserByLoginResponse getUserByLogin() {
+        if (authService.hasPermission(AuthUserState.ACTIVE)) {
+            User user = userService.findByLogin(authService.getUserName());
+            GetUserByLoginResponse response = new GetUserByLoginResponse();
+            response.setUser(userConverter.convert(user));
+            return response;
+        }
+        throw new AuthException("Not permit");
     }
 
     @ResponsePayload
     @PayloadRoot(namespace = NAMESPACE_URI, localPart = "updateUserRequest")
     public UpdateUserResponse updateUser(@RequestPayload UpdateUserRequest request) {
-        User userToUpdate = userConverter.reconvert(request.getUserToUpdate());
-        UpdateUserResponse response = new UpdateUserResponse();
-        userService.updateUser(userToUpdate);
-        return response;
+        if (authService.hasPermission(AuthUserState.ACTIVE)){
+            String login = authService.getUserName();
+            User userToUpdate = userConverter.reconvert(request.getUserToUpdate());
+            if (userToUpdate.getLogin().equals(login)){
+                UpdateUserResponse response = new UpdateUserResponse();
+                userService.updateUser(userToUpdate);
+                return response;
+            }
+        }
+        throw new AuthException("Not permit");
     }
 
     @ResponsePayload
     @PayloadRoot(namespace = NAMESPACE_URI, localPart = "createUserRequest")
     public CreateUserResponse createNewUser(@RequestPayload CreateUserRequest request) {
-        User userToCreate = userConverter.reconvert(request.getUserToCreate());
-        User createdUser = userService.createNewUser(userToCreate);
-        CreateUserResponse response = new CreateUserResponse();
-        response.setCreatedUser(userConverter.convert(createdUser));
-        return response;
+        if (authService.hasPermission(AuthUserState.UNVERIFIED)){
+            String login = authService.getUserName();
+            User userToCreate = userConverter.reconvert(request.getUserToCreate());
+            if (userToCreate.getLogin().equals(login)){
+                User createdUser = userService.createNewUser(userToCreate);
+                CreateUserResponse response = new CreateUserResponse();
+                response.setCreatedUser(userConverter.convert(createdUser));
+                return response;
+            }
+        }
+        throw new AuthException("Not permit");
     }
 }
