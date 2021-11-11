@@ -19,7 +19,7 @@ public class ChatWebServiceConfig extends WsConfigurerAdapter {
             @Qualifier("chatsSchema") XsdSchema chatsSchema) {
         DefaultWsdl11Definition wsdl11Definition = new DefaultWsdl11Definition();
         wsdl11Definition.setPortTypeName("ChatPort");
-        wsdl11Definition.setLocationUri("/ws");
+        wsdl11Definition.setLocationUri("/api/account");
         wsdl11Definition.setTargetNamespace("http://spring.io/guides/gs-producing-web-service");
         wsdl11Definition.setSchema(chatsSchema);
         return wsdl11Definition;

@@ -18,7 +18,7 @@ public class UserWebServiceConfig {
             @Qualifier("usersSchema") XsdSchema usersSchema) {
         DefaultWsdl11Definition wsdl11Definition = new DefaultWsdl11Definition();
         wsdl11Definition.setPortTypeName("UserPort");
-        wsdl11Definition.setLocationUri("/ws");
+        wsdl11Definition.setLocationUri("/api/account");
         wsdl11Definition.setTargetNamespace("http://spring.io/guides/gs-producing-web-service");
         wsdl11Definition.setSchema(usersSchema);
         return wsdl11Definition;
