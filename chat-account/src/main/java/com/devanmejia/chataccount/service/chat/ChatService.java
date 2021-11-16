@@ -1,7 +1,7 @@
 package com.devanmejia.chataccount.service.chat;
 
 import com.devanmejia.chataccount.model.Chat;
-import com.devanmejia.chataccount.model.User;
+import com.devanmejia.chataccount.model.user.User;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

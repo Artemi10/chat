@@ -54,6 +54,24 @@
         </xs:complexType>
     </xs:element>
 
+    <xs:element name="getUserInfoRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="login" type="xs:string"/>
+                <xs:element name="publicKey" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="getUserInfoResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="encryptedUser" type="xs:string"/>
+                <xs:element name="encryptedKey" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
     <xs:complexType name="UserDTO">
         <xs:sequence>
             <xs:element name="id" type="xs:long" nillable="true"/>

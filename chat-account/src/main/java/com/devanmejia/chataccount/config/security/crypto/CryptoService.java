@@ -1,11 +1,10 @@
 package com.devanmejia.chataccount.config.security.crypto;
 
-import com.devanmejia.chataccount.transfer.AuthenticationDTO;
-import org.springframework.security.core.userdetails.UserDetails;
+import com.devanmejia.chataccount.transfer.EncryptedObj;
 import org.springframework.stereotype.Service;
 
+
 @Service
-public interface CryptoService {
-    String getPublicKey();
-    UserDetails decryptUserDetails(AuthenticationDTO authenticationDTO);
+public interface CryptoService<T> {
+    EncryptedObj encryptObj(T obj, String keyStr);
 }

@@ -2,7 +2,7 @@ package com.devanmejia.chataccount.service.chat;
 
 import com.devanmejia.chataccount.exception.EntityException;
 import com.devanmejia.chataccount.model.Chat;
-import com.devanmejia.chataccount.model.User;
+import com.devanmejia.chataccount.model.user.User;
 import com.devanmejia.chataccount.repository.ChatRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

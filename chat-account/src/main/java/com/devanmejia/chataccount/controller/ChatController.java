@@ -1,10 +1,11 @@
 package com.devanmejia.chataccount.controller;
 
-import com.devanmejia.chataccount.config.security.auth_users.AuthUserState;
+
 import com.devanmejia.chataccount.config.security.authentication.AuthService;
 import com.devanmejia.chataccount.exception.AuthException;
 import com.devanmejia.chataccount.model.Chat;
-import com.devanmejia.chataccount.model.User;
+import com.devanmejia.chataccount.model.user.State;
+import com.devanmejia.chataccount.model.user.User;
 import com.devanmejia.chataccount.service.chat.ChatService;
 import com.devanmejia.chataccount.service.converter.Converter;
 import com.devanmejia.chataccount.service.user.UserService;
@@ -38,7 +39,7 @@ public class ChatController {
     @ResponsePayload
     @PayloadRoot(namespace = NAMESPACE_URI, localPart = "getChatByNameRequest")
     public GetChatByNameResponse getChatByName(@RequestPayload GetChatByNameRequest request) {
-        if (authService.hasPermission(AuthUserState.ACTIVE)){
+        if (authService.hasPermission(State.ACTIVE)){
             String login = authService.getUserName();
             Chat chat = chatService.findByName(request.getChatName());
             if (chatService.isUserContains(login, chat)){
@@ -53,7 +54,7 @@ public class ChatController {
     @ResponsePayload
     @PayloadRoot(namespace = NAMESPACE_URI, localPart = "getChatsByAdminNameRequest")
     public GetChatsByAdminNameResponse getChatsByAdminName() {
-        if (authService.hasPermission(AuthUserState.ACTIVE)){
+        if (authService.hasPermission(State.ACTIVE)){
             User admin = userService.findByLogin(authService.getUserName());
             List<Chat> chats = chatService.findByAdmin(admin);
             GetChatsByAdminNameResponse response = new GetChatsByAdminNameResponse();
@@ -66,7 +67,7 @@ public class ChatController {
     @ResponsePayload
     @PayloadRoot(namespace = NAMESPACE_URI, localPart = "createChatRequest")
     public CreateChatResponse createChat(@RequestPayload CreateChatRequest request) {
-        if (authService.hasPermission(AuthUserState.ACTIVE)){
+        if (authService.hasPermission(State.ACTIVE)){
             User admin = userService.findByLogin(authService.getUserName());
             Set<User> users = userService.findAllByLogins(request.getUserNames());
             Chat chat = chatService.createChat(request.getChatName(), admin, users);
@@ -80,7 +81,7 @@ public class ChatController {
     @ResponsePayload
     @PayloadRoot(namespace = NAMESPACE_URI, localPart = "deleteUserFromChatRequest")
     public DeleteUserFromChatResponse deleteUserFromChat(@RequestPayload DeleteUserFromChatRequest request) {
-        if (authService.hasPermission(AuthUserState.ACTIVE)){
+        if (authService.hasPermission(State.ACTIVE)){
             String login = authService.getUserName();
             Chat chat = chatService.findByName(request.getChatName());
             if (chatService.isUserAdmin(login, chat)) {
@@ -95,7 +96,7 @@ public class ChatController {
     @ResponsePayload
     @PayloadRoot(namespace = NAMESPACE_URI, localPart = "addUserToChatRequest")
     public AddUserToChatResponse addUserToChat(@RequestPayload AddUserToChatRequest request) {
-        if (authService.hasPermission(AuthUserState.ACTIVE)) {
+        if (authService.hasPermission(State.ACTIVE)) {
             String login = authService.getUserName();
             Chat chat = chatService.findByName(request.getChatName());
             if (chatService.isUserAdmin(login, chat)) {
@@ -110,7 +111,7 @@ public class ChatController {
     @ResponsePayload
     @PayloadRoot(namespace = NAMESPACE_URI, localPart = "updateChatNameRequest")
     public UpdateChatNameResponse updateChat(@RequestPayload UpdateChatNameRequest request) {
-        if (authService.hasPermission(AuthUserState.ACTIVE)) {
+        if (authService.hasPermission(State.ACTIVE)) {
             chatService.updateChat(request.getId(), request.getNewChatName());
             return new UpdateChatNameResponse();
         }

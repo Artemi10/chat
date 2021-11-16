@@ -1,6 +1,6 @@
 package com.devanmejia.chataccount.config.security.authentication;
 
-import com.devanmejia.chataccount.config.security.auth_users.AuthUserState;
+import com.devanmejia.chataccount.model.user.State;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 public class AuthServiceImpl implements AuthService {
 
     @Override
-    public boolean hasPermission(AuthUserState state) {
+    public boolean hasPermission(State state) {
         Authentication authentication = getAuthentication();
         if (authentication.isAuthenticated()){
             UserDetails userDetails = (UserDetails) getAuthentication().getPrincipal();

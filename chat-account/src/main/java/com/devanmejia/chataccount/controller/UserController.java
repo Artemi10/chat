@@ -1,9 +1,9 @@
 package com.devanmejia.chataccount.controller;
 
-import com.devanmejia.chataccount.config.security.auth_users.AuthUserState;
 import com.devanmejia.chataccount.config.security.authentication.AuthService;
 import com.devanmejia.chataccount.exception.AuthException;
-import com.devanmejia.chataccount.model.User;
+import com.devanmejia.chataccount.model.user.State;
+import com.devanmejia.chataccount.model.user.User;
 import com.devanmejia.chataccount.service.converter.Converter;
 import com.devanmejia.chataccount.service.user.UserService;
 import io.spring.guides.gs_producing_web_service.*;
@@ -33,7 +33,7 @@ public class UserController {
     @ResponsePayload
     @PayloadRoot(namespace = NAMESPACE_URI, localPart = "getUserFriendsRequest")
     public GetUserFriendsResponse getUserFriends() {
-        if (authService.hasPermission(AuthUserState.ACTIVE)){
+        if (authService.hasPermission(State.ACTIVE)){
             Set<User> friends = userService.getFriends(authService.getUserName());
             GetUserFriendsResponse response = new GetUserFriendsResponse();
             response.getFriends().addAll(userConverter.convert(friends));
@@ -45,7 +45,7 @@ public class UserController {
     @ResponsePayload
     @PayloadRoot(namespace = NAMESPACE_URI, localPart = "getUserByLoginRequest")
     public GetUserByLoginResponse getUserByLogin() {
-        if (authService.hasPermission(AuthUserState.ACTIVE)) {
+        if (authService.hasPermission(State.ACTIVE)) {
             User user = userService.findByLogin(authService.getUserName());
             GetUserByLoginResponse response = new GetUserByLoginResponse();
             response.setUser(userConverter.convert(user));
@@ -57,7 +57,7 @@ public class UserController {
     @ResponsePayload
     @PayloadRoot(namespace = NAMESPACE_URI, localPart = "updateUserRequest")
     public UpdateUserResponse updateUser(@RequestPayload UpdateUserRequest request) {
-        if (authService.hasPermission(AuthUserState.ACTIVE)){
+        if (authService.hasPermission(State.ACTIVE)){
             String login = authService.getUserName();
             User userToUpdate = userConverter.reconvert(request.getUserToUpdate());
             if (userToUpdate.getLogin().equals(login)){
@@ -72,7 +72,7 @@ public class UserController {
     @ResponsePayload
     @PayloadRoot(namespace = NAMESPACE_URI, localPart = "createUserRequest")
     public CreateUserResponse createNewUser(@RequestPayload CreateUserRequest request) {
-        if (authService.hasPermission(AuthUserState.UNVERIFIED)){
+        if (authService.hasPermission(State.UNVERIFIED)){
             String login = authService.getUserName();
             User userToCreate = userConverter.reconvert(request.getUserToCreate());
             if (userToCreate.getLogin().equals(login)){

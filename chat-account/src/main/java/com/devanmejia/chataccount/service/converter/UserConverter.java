@@ -1,6 +1,6 @@
 package com.devanmejia.chataccount.service.converter;
 
-import com.devanmejia.chataccount.model.User;
+import com.devanmejia.chataccount.model.user.User;
 import io.spring.guides.gs_producing_web_service.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -1,5 +1,6 @@
 package com.devanmejia.chataccount.model;
 
+import com.devanmejia.chataccount.model.user.User;
 import lombok.*;
 import org.hibernate.Hibernate;
 import org.hibernate.annotations.NaturalId;
