@@ -5,3 +5,6 @@ class AuthException(message: String)
 
 class EmailException(email: String)
     : IllegalArgumentException("Can not send message to $email")
+
+class ConverterException(s: String)
+    : IllegalArgumentException("Can not convert: $s")

@@ -5,6 +5,7 @@ import com.devanmejia.chatauth.models.UserState
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
+import java.util.*
 
 interface DTO{
     fun toJSON(): String = ObjectMapper().writeValueAsString(this)
@@ -13,7 +14,8 @@ data class CodeDTO(val login: String, val code: String) : DTO
 data class TokenDTO(val jwt: String, val key: String) : DTO
 data class EmailDTO(val address: String, val content: String) : DTO
 data class LogInDTO(val login: String, val password: String) : DTO
-data class SignUpDTO(val login: String, val password: String, val email: String) : DTO
+data class SignUpDTO(val login: String, val password: String,
+                     val birthDate: Date, val email: String) : DTO
 data class AuthenticationDTO(val data: String, val key: String) : DTO
 
 data class UserDTO(private val userName: String, private val password: String,

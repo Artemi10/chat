@@ -1,6 +1,7 @@
 package com.devanmejia.chataccount.service.user;
 
 import com.devanmejia.chataccount.model.user.User;
+import com.devanmejia.chataccount.transfer.UserInfo;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
@@ -12,5 +13,5 @@ public interface UserService {
     Set<User> findAllByLogins(Collection<String> logins);
     Set<User> getFriends(String login);
     void updateUser(User userToUpdate);
-    User createNewUser(User userToCreate);
+    UserInfo save(UserInfo userInfo);
 }

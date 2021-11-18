@@ -68,20 +68,4 @@ public class UserController {
         }
         throw new AuthException("Not permit");
     }
-
-    @ResponsePayload
-    @PayloadRoot(namespace = NAMESPACE_URI, localPart = "createUserRequest")
-    public CreateUserResponse createNewUser(@RequestPayload CreateUserRequest request) {
-        if (authService.hasPermission(State.UNVERIFIED)){
-            String login = authService.getUserName();
-            User userToCreate = userConverter.reconvert(request.getUserToCreate());
-            if (userToCreate.getLogin().equals(login)){
-                User createdUser = userService.createNewUser(userToCreate);
-                CreateUserResponse response = new CreateUserResponse();
-                response.setCreatedUser(userConverter.convert(createdUser));
-                return response;
-            }
-        }
-        throw new AuthException("Not permit");
-    }
 }

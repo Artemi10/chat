@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.io.Serializable;
+import java.util.Date;
 
 @Setter
 @Getter
@@ -16,6 +17,7 @@ public class UserInfo {
     private String email;
     private String secretCode;
     private String state;
+    private Date birthDate;
     private boolean enable;
     private boolean accountNonLocked;
     private boolean accountNonExpired;
@@ -24,7 +26,7 @@ public class UserInfo {
     public static UserInfo form(User user) {
         return new UserInfo(user.getLogin(), user.getPassword(),
                 user.getEmail(), user.getSecretCode(), user.getState().name(),
-                user.isEnabled(), user.isAccountNonLocked(),
+                user.getBirthDate(), user.isEnabled(), user.isAccountNonLocked(),
                 user.isAccountNonExpired(), user.isCredentialsNonExpired()
         );
     }

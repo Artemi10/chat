@@ -1,22 +1,28 @@
 package com.devanmejia.chatauth.configuration.soap
 
-
 import com.devanmejia.chatauth.exceptions.AuthException
-import io.spring.guides.gs_producing_web_service.GetUserInfoRequest
-import io.spring.guides.gs_producing_web_service.GetUserInfoResponse
-import io.spring.guides.gs_producing_web_service.RequestBody
+import com.devanmejia.chatauth.models.User
+import com.devanmejia.chatauth.services.Converter
+import io.spring.guides.gs_producing_web_service.*
 import kotlinx.coroutines.reactor.mono
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.MediaType
-import org.springframework.stereotype.Component
+import org.springframework.stereotype.Service
 import org.springframework.web.reactive.function.client.WebClient
 import org.springframework.web.reactive.function.client.awaitBody
 
-@Component
-class UserInfoClient(private val webClient: WebClient,
-    @Value("\${api.account}") private val reportsApi: String,
-    @Value("\${api.account.password}") password: String,
-    @Value("\${api.account.username}") userName: String) {
+@Service
+interface UserInfoClient{
+    suspend fun getUserInfo(login: String): User?
+    suspend fun saveUserInfo(user: User): User
+}
+
+@Service
+class UserInfoClientImpl(private val webClient: WebClient,
+                         private val converter: Converter<UserInfoDTO, User>,
+                         @Value("\${api.account}") private val reportsApi: String,
+                         @Value("\${api.account.password}") password: String,
+                         @Value("\${api.account.username}") userName: String): UserInfoClient {
 
     private val headerContent = "<wsse:Security xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\">\n" +
             "<wsse:UsernameToken>\n" +
@@ -24,20 +30,35 @@ class UserInfoClient(private val webClient: WebClient,
             "   <wsse:Password>$password</wsse:Password>\n" +
             "</wsse:UsernameToken>\n </wsse:Security>"
 
-    suspend fun getUserInfo(login: String, publicKey: String): Pair<String, String> {
+    override suspend fun getUserInfo(login: String): User? {
         val requestBody = GetUserInfoRequest()
         requestBody.login = login
-        requestBody.publicKey = publicKey
         val request = UserInfoClientRequest(headerContent, requestBody)
         try{
-            val response = webClient.post()
+            val responseBody = webClient.post()
                 .uri(reportsApi)
                 .contentType(MediaType.TEXT_XML)
                 .body(mono { request }, request.javaClass)
-                .retrieve().awaitBody<GetUserInfoResponse>()
-            return Pair(response.encryptedUser, response.encryptedKey)
+                .retrieve().awaitBody<GetUserInfoResponse>().user
+            return converter.reconvert(responseBody)
         } catch (e: Exception){
-            throw AuthException("Invalid user: ${e.message}")
+            return null
+        }
+    }
+
+    override suspend fun saveUserInfo(user: User): User {
+        val requestBody = SaveUserInfoRequest()
+        requestBody.userInfo = converter.convert(user)
+        val request = UserInfoClientRequest(headerContent, requestBody)
+        return try{
+            val responseBody = webClient.post()
+                .uri(reportsApi)
+                .contentType(MediaType.TEXT_XML)
+                .body(mono { request }, request.javaClass)
+                .retrieve().awaitBody<SaveUserInfoResponse>().userInfo
+            converter.reconvert(responseBody)
+        } catch (e: Exception){
+            throw AuthException("Can not save user. ${e.message}")
         }
     }
 }

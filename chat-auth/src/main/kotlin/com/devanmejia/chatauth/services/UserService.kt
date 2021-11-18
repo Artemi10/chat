@@ -40,7 +40,8 @@ class UserServiceImpl(
     override suspend fun signUp(signUpDTO: SignUpDTO): User {
         if (!existsByLogin(signUpDTO.login)){
             val encodedPassword = passwordEncoder.encode(signUpDTO.password)
-            val newUser = User(signUpDTO.login, encodedPassword, signUpDTO.email)
+            val newUser = User(signUpDTO.login, encodedPassword,
+                signUpDTO.birthDate ,signUpDTO.email)
             return userRepository.save(newUser)
         }
         else throw AuthException("${signUpDTO.login} has already been registered")

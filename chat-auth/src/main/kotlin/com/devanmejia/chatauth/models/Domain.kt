@@ -3,12 +3,15 @@ package com.devanmejia.chatauth.models
 import com.fasterxml.jackson.annotation.JsonProperty
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
+import java.util.*
 
 data class User(
     @JsonProperty("login")
     val login: String,
     @JsonProperty("password")
     private val password: String,
+    @JsonProperty("birthDate")
+    val birthDate: Date,
     @JsonProperty("email")
     val email: String,
     @JsonProperty("secretCode")
@@ -51,5 +54,6 @@ data class User(
 
 enum class UserState {
     ACTIVE,
-    UNVERIFIED
+    UNVERIFIED,
+    SERVICE
 }

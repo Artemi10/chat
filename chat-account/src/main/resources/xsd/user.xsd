@@ -38,27 +38,10 @@
         <xs:complexType/>
     </xs:element>
 
-    <xs:element name="createUserRequest">
-        <xs:complexType>
-            <xs:sequence>
-                <xs:element name="userToCreate" type="tns:UserDTO"/>
-            </xs:sequence>
-        </xs:complexType>
-    </xs:element>
-
-    <xs:element name="createUserResponse">
-        <xs:complexType>
-            <xs:sequence>
-                <xs:element name="createdUser" type="tns:UserDTO"/>
-            </xs:sequence>
-        </xs:complexType>
-    </xs:element>
-
     <xs:element name="getUserInfoRequest">
         <xs:complexType>
             <xs:sequence>
                 <xs:element name="login" type="xs:string"/>
-                <xs:element name="publicKey" type="xs:string"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
@@ -66,8 +49,23 @@
     <xs:element name="getUserInfoResponse">
         <xs:complexType>
             <xs:sequence>
-                <xs:element name="encryptedUser" type="xs:string"/>
-                <xs:element name="encryptedKey" type="xs:string"/>
+                <xs:element name="user" type="tns:UserInfoDTO"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="saveUserInfoRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="userInfo" type="tns:UserInfoDTO"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="saveUserInfoResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="userInfo" type="tns:UserInfoDTO"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
@@ -79,4 +77,27 @@
             <xs:element name="birthDate" type="xs:date"/>
         </xs:sequence>
     </xs:complexType>
+
+    <xs:complexType name="UserInfoDTO">
+        <xs:sequence>
+            <xs:element name="login" type="xs:string"/>
+            <xs:element name="password" type="xs:string"/>
+            <xs:element name="email" type="xs:string"/>
+            <xs:element name="secretCode" type="xs:string" nillable="true"/>
+            <xs:element name="enable" type="xs:boolean"/>
+            <xs:element name="state" type="tns:state"/>
+            <xs:element name="birthDate" type="xs:date"/>
+            <xs:element name="accountNonLocked" type="xs:boolean"/>
+            <xs:element name="accountNonExpired" type="xs:boolean"/>
+            <xs:element name="credentialsNonExpired" type="xs:boolean"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:simpleType name="state">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="ACTIVE"/>
+            <xs:enumeration value="SERVICE"/>
+            <xs:enumeration value="UNVERIFIED"/>
+        </xs:restriction>
+    </xs:simpleType>
 </xs:schema>
