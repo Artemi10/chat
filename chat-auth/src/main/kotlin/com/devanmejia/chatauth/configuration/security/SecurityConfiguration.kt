@@ -19,12 +19,6 @@ class SecurityConfiguration {
         val authenticationWebFilter = AuthenticationWebFilter(jwtAuthenticationManager)
         authenticationWebFilter.setServerAuthenticationConverter(jwtAuthenticationConverter)
         return http
-            .addFilterAt(authenticationWebFilter, SecurityWebFiltersOrder.AUTHENTICATION)
-            .build()
-    }
-    @Bean
-    fun serverHttpSecurity(): ServerHttpSecurity{
-        return ServerHttpSecurity.http()
             .authorizeExchange()
             .pathMatchers("/api/auth/verify", "/api/auth/code").hasAuthority(UserState.UNVERIFIED.name)
             .anyExchange().permitAll().and()
@@ -33,5 +27,7 @@ class SecurityConfiguration {
             .cors().disable()
             .formLogin().disable()
             .logout().disable()
+            .addFilterAt(authenticationWebFilter, SecurityWebFiltersOrder.AUTHENTICATION)
+            .build()
     }
 }

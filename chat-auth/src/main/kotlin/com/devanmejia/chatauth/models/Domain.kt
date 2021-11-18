@@ -12,11 +12,11 @@ data class User(
     @JsonProperty("email")
     val email: String,
     @JsonProperty("secretCode")
-    var secretCode: String = "",
+    var secretCode: String? = "",
     @JsonProperty("state")
     var state: UserState = UserState.ACTIVE,
-    @JsonProperty("enabled")
-    private val enabled: Boolean = true,
+    @JsonProperty("enable")
+    private val enable: Boolean = true,
     @JsonProperty("accountNonLocked")
     private val accountNonLocked: Boolean = true,
     @JsonProperty("accountNonExpired")
@@ -46,7 +46,7 @@ data class User(
 
     override fun isCredentialsNonExpired() = credentialsNonExpired
 
-    override fun isEnabled() = enabled
+    override fun isEnabled() = enable
 }
 
 enum class UserState {

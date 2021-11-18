@@ -1,6 +1,6 @@
 package com.devanmejia.chatauth.repositories
 
-import com.devanmejia.chatauth.configuration.security.soap.UserInfoClient
+import com.devanmejia.chatauth.configuration.soap.UserInfoClient
 import com.devanmejia.chatauth.models.User
 import com.devanmejia.chatauth.services.CryptoService2
 import org.springframework.stereotype.Service

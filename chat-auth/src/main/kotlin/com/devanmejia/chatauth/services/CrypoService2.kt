@@ -71,7 +71,10 @@ class CryptoService2Impl : CryptoService2 {
         return decrypt.doFinal(DatatypeConverter.parseBase64Binary(data))
     }
 
-    private fun deserializeUser(byteArray: ByteArray) =
-        jacksonObjectMapper().readValue(String(byteArray), User::class.java)
+    private fun deserializeUser(byteArray: ByteArray): User {
+        val str = String(byteArray)
+        return jacksonObjectMapper().readValue(str, User::class.java)
+    }
+
 
 }

@@ -1,5 +1,6 @@
 package com.devanmejia.chatauth.services.email
 
+import com.devanmejia.chatauth.exceptions.AuthException
 import com.devanmejia.chatauth.exceptions.EmailException
 import com.devanmejia.chatauth.models.User
 import com.devanmejia.chatauth.transfer.EmailDTO
@@ -21,7 +22,13 @@ class EmailServiceImpl(private val webClientBuilder: WebClient.Builder,
                        private val apiEmail: String) : EmailService {
 
     override suspend fun sendVerifyEmail(user: User, token: String){
-        sendVerifyEmail(user.email, user.secretCode, token)
+        val code = user.secretCode
+        if (code != null){
+            sendVerifyEmail(user.email, code, token)
+        }
+        else{
+            throw AuthException("Secret code is not generated")
+        }
     }
 
     override suspend fun sendVerifyEmail(email: String, code: String, token: String) {
