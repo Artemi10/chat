@@ -1,11 +1,9 @@
 package com.devanmejia.chatmessaging.service
 
+import com.devanmejia.chatmessaging.configuration.security.User
 import com.devanmejia.chatmessaging.exception.AuthException
-import com.devanmejia.chatmessaging.transfer.AuthenticationDTO
-import com.devanmejia.chatmessaging.transfer.TokenDTO
 import kotlinx.coroutines.reactor.mono
 import org.springframework.beans.factory.annotation.Value
-import org.springframework.http.MediaType
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.stereotype.Service
 import org.springframework.web.reactive.function.client.WebClient
@@ -21,23 +19,14 @@ interface UserDetailsService {
 
 @Service
 class UserDetailsServiceImpl(private val webClientBuilder: WebClient.Builder,
-                             @Value("\${api.auth}") private val apiAuth: String,
-                             private val cryptoService: CryptoService
+                             @Value("\${api.auth}") private val apiAuth: String
 ) : UserDetailsService {
 
-    override suspend fun getUserDetails(token: String): UserDetails {
-        val key = cryptoService.getPublicKey()
-        val tokenDTO = TokenDTO(token, key)
-        val encryptedData = getEncryptedData(tokenDTO)
-        return cryptoService.decryptUserDetails(encryptedData)
-    }
-
-    private suspend fun getEncryptedData(tokenDTO: TokenDTO): AuthenticationDTO {
+    override suspend fun getUserDetails(token: String): User {
         try{
-            return webClientBuilder.build().post()
+            return webClientBuilder.build().get()
                 .uri("$apiAuth/authentication")
-                .contentType(MediaType.APPLICATION_JSON)
-                .bodyValue(tokenDTO.toJSON())
+                .header("Authorization", "Bearer_${token}")
                 .retrieve().awaitBody()
         } catch (ex: WebClientException){
             throw AuthException("Incorrect token")
@@ -46,7 +35,8 @@ class UserDetailsServiceImpl(private val webClientBuilder: WebClient.Builder,
 
     override fun isAuthenticated(token: String) = mono {
         getUserDetails(token)
-            .authorities.map { it.authority }.contains("ACTIVE")
+            .authorities.map { it.authority }
+            .contains("ACTIVE")
     }
 }
 

@@ -1,4 +1,4 @@
-package com.devanmejia.chatauth.services.email
+package com.devanmejia.chatauth.services
 
 import com.devanmejia.chatauth.exceptions.AuthException
 import com.devanmejia.chatauth.exceptions.EmailException

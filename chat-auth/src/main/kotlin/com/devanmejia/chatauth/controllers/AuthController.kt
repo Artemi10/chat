@@ -1,10 +1,10 @@
 package com.devanmejia.chatauth.controllers
 
-import com.devanmejia.chatauth.services.CryptoService
-import com.devanmejia.chatauth.services.email.EmailService
+import com.devanmejia.chatauth.services.EmailService
 import com.devanmejia.chatauth.services.jwt.JWTSigner
-import com.devanmejia.chatauth.services.user.UserService
+import com.devanmejia.chatauth.services.UserService
 import com.devanmejia.chatauth.transfer.*
+import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.server.ServerWebExchange
 
@@ -12,8 +12,7 @@ import org.springframework.web.server.ServerWebExchange
 @RequestMapping("/api/auth")
 class AuthController(private val jwtSigner: JWTSigner,
                      private val userService: UserService,
-                     private val emailService: EmailService,
-                     private val cryptoService: CryptoService
+                     private val emailService: EmailService
 ) {
 
     @PostMapping("/logIn")
@@ -45,10 +44,9 @@ class AuthController(private val jwtSigner: JWTSigner,
         return jwtSigner.createJWT(user)
     }
 
-    @PostMapping("/authentication")
-    suspend fun getAuthentication(@RequestBody tokeDTO: TokenDTO): AuthenticationDTO {
-        val login = jwtSigner.getLogin(tokeDTO.jwt)
-        val user = userService.getUserByLogin(login)
-        return cryptoService.encryptAuthentication(user, tokeDTO.key)
+    @GetMapping("/authentication")
+    suspend fun getAuthentication(exchange: ServerWebExchange): UserDetails {
+        val login = jwtSigner.getLogin(exchange)
+        return userService.getUserByLogin(login)
     }
 }

@@ -23,14 +23,14 @@ import java.util.Collections;
 import java.util.List;
 
 @Configuration
-public class JWTAuthenticationManager implements AuthenticationManager {
+public class TokenAuthenticationManager implements AuthenticationManager {
     private final UserDetailsService userDetailsService;
     private final UserService userService;
     private final String serviceName;
 
     @Autowired
-    public JWTAuthenticationManager(UserDetailsService userDetailsService, UserService userService,
-                                    @Value("${api.auth-service.name}") String serviceName) {
+    public TokenAuthenticationManager(UserDetailsService userDetailsService, UserService userService,
+                                      @Value("${api.auth-service.name}") String serviceName) {
         this.userDetailsService = userDetailsService;
         this.userService = userService;
         this.serviceName = serviceName;

@@ -1,4 +1,4 @@
-package com.devanmejia.chatauth.services.user
+package com.devanmejia.chatauth.services
 
 import com.devanmejia.chatauth.exceptions.AuthException
 import com.devanmejia.chatauth.models.User

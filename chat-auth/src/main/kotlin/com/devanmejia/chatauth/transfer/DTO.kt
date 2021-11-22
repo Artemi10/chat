@@ -16,7 +16,6 @@ data class EmailDTO(val address: String, val content: String) : DTO
 data class LogInDTO(val login: String, val password: String) : DTO
 data class SignUpDTO(val login: String, val password: String,
                      val birthDate: Date, val email: String) : DTO
-data class AuthenticationDTO(val data: String, val key: String) : DTO
 
 data class UserDTO(private val userName: String, private val password: String,
                    val state: UserState) : UserDetails, DTO {

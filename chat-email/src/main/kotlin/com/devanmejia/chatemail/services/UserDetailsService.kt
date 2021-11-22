@@ -1,10 +1,8 @@
 package com.devanmejia.chatemail.services
 
+import com.devanmejia.chatemail.configuration.security.User
 import com.devanmejia.chatemail.exceptions.AuthException
-import com.devanmejia.chatemail.transfer.AuthenticationDTO
-import com.devanmejia.chatemail.transfer.TokenDTO
 import org.springframework.beans.factory.annotation.Value
-import org.springframework.http.MediaType
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.stereotype.Service
 import org.springframework.web.reactive.function.client.WebClient
@@ -19,22 +17,13 @@ interface UserDetailsService {
 @Service
 class UserDetailsServiceImpl(private val webClientBuilder: WebClient.Builder,
                              @Value("\${api.auth}") private val apiAuth: String,
-                             private val cryptoService: CryptoService
 ) : UserDetailsService {
 
-    override suspend fun getUserDetails(token: String): UserDetails {
-        val key = cryptoService.getPublicKey()
-        val tokenDTO = TokenDTO(token, key)
-        val encryptedData = getEncryptedData(tokenDTO)
-        return cryptoService.decryptUserDetails(encryptedData)
-    }
-
-    private suspend fun getEncryptedData(tokenDTO: TokenDTO): AuthenticationDTO {
+    override suspend fun getUserDetails(token: String): User {
         try{
-            return webClientBuilder.build().post()
+            return webClientBuilder.build().get()
                 .uri("$apiAuth/authentication")
-                .contentType(MediaType.APPLICATION_JSON)
-                .bodyValue(tokenDTO.toJSON())
+                .header("Authorization", "Bearer_${token}")
                 .retrieve().awaitBody()
         } catch (ex: WebClientException){
             throw AuthException("Incorrect token")

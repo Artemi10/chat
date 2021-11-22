@@ -1,4 +1,4 @@
-package com.devanmejia.chatemail.configuration
+package com.devanmejia.chatauth.configuration
 
 import org.springframework.cloud.client.loadbalancer.LoadBalanced
 import org.springframework.context.annotation.Bean
@@ -7,6 +7,7 @@ import org.springframework.web.reactive.function.client.WebClient
 
 @Configuration
 class KotlinConfig {
+
     @Bean
     @LoadBalanced
     fun webClientBuilder() = WebClient.builder()
