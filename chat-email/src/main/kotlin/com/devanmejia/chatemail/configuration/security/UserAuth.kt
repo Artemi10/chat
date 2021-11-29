@@ -28,6 +28,7 @@ data class User(
 
     override fun isEnabled() = enabled
 }
+
 enum class UserState {
     ACTIVE,
     UNVERIFIED

@@ -1,37 +1,25 @@
 package com.devanmejia.chataccount.config.security;
 
+import com.devanmejia.chataccount.config.security.user_details.UserInfoService;
 import com.devanmejia.chataccount.exception.AuthException;
-import com.devanmejia.chataccount.config.security.user_details.UserDetailsService;
-import com.devanmejia.chataccount.model.user.State;
-import com.devanmejia.chataccount.model.user.User;
 import com.devanmejia.chataccount.service.user.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.password.PasswordEncoder;
-
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 
 @Configuration
 public class TokenAuthenticationManager implements AuthenticationManager {
-    private final UserDetailsService userDetailsService;
+    private final UserInfoService userInfoService;
     private final UserService userService;
     private final String serviceName;
 
-    @Autowired
-    public TokenAuthenticationManager(UserDetailsService userDetailsService, UserService userService,
+    public TokenAuthenticationManager(UserInfoService userInfoService, UserService userService,
                                       @Value("${api.auth-service.name}") String serviceName) {
-        this.userDetailsService = userDetailsService;
+        this.userInfoService = userInfoService;
         this.userService = userService;
         this.serviceName = serviceName;
     }
@@ -49,8 +37,7 @@ public class TokenAuthenticationManager implements AuthenticationManager {
         }
         try{
             String token = (String) authentication.getCredentials();
-            String login = userDetailsService.getUserLogin(token);
-            UserDetails userDetails = userService.findByLogin(login);
+            UserDetails userDetails = userInfoService.getUserInfo(token);
             return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
         } catch (AuthException e){
             return new UsernamePasswordAuthenticationToken(null, null);

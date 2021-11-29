@@ -7,5 +7,5 @@ import org.springframework.data.mongodb.core.mapping.Document
 data class Message(
     @Id private val id: String? = null,
     val login: String,
-    val content: String
-    )
+    val content: String,
+    var chatId: Long)

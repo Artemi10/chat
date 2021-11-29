@@ -52,19 +52,6 @@ public class ChatController {
     }
 
     @ResponsePayload
-    @PayloadRoot(namespace = NAMESPACE_URI, localPart = "getChatsByAdminNameRequest")
-    public GetChatsByAdminNameResponse getChatsByAdminName() {
-        if (authService.hasPermission(State.ACTIVE)){
-            User admin = userService.findByLogin(authService.getUserName());
-            List<Chat> chats = chatService.findByAdmin(admin);
-            GetChatsByAdminNameResponse response = new GetChatsByAdminNameResponse();
-            response.getChats().addAll(chatConverter.convert(chats));
-            return response;
-        }
-        throw new AuthException("Not permit");
-    }
-
-    @ResponsePayload
     @PayloadRoot(namespace = NAMESPACE_URI, localPart = "createChatRequest")
     public CreateChatResponse createChat(@RequestPayload CreateChatRequest request) {
         if (authService.hasPermission(State.ACTIVE)){
@@ -73,6 +60,18 @@ public class ChatController {
             Chat chat = chatService.createChat(request.getChatName(), admin, users);
             CreateChatResponse response = new CreateChatResponse();
             response.setChat(chatConverter.convert(chat));
+            return response;
+        }
+        throw new AuthException("Not permit");
+    }
+
+    @ResponsePayload
+    @PayloadRoot(namespace = NAMESPACE_URI, localPart = "getUserChatsRequest")
+    public GetUserChatsResponse getUserChats() {
+        if (authService.hasPermission(State.ACTIVE)){
+            Set<Chat> chats = userService.getChats(authService.getUserName());
+            GetUserChatsResponse response = new GetUserChatsResponse();
+            response.getChats().addAll(chatConverter.convert(chats));
             return response;
         }
         throw new AuthException("Not permit");

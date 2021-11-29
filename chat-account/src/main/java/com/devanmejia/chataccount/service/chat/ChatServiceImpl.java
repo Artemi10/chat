@@ -7,7 +7,6 @@ import com.devanmejia.chataccount.repository.ChatRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Set;
 
 @Service
@@ -62,11 +61,6 @@ public class ChatServiceImpl implements ChatService{
     @Override
     public void updateChat(long id, String newName) {
         chatRepository.updateChat(id, newName);
-    }
-
-    @Override
-    public List<Chat> findByAdmin(User admin) {
-        return chatRepository.findAllByAdmin(admin);
     }
 
     @Override

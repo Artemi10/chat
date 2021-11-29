@@ -4,6 +4,7 @@ import com.devanmejia.chatmessaging.exception.AuthException
 import com.devanmejia.chatmessaging.model.Message
 import com.devanmejia.chatmessaging.service.MessageService
 import com.devanmejia.chatmessaging.service.UserDetailsService
+import com.devanmejia.chatmessaging.transfer.AuthPayload
 import io.rsocket.exceptions.RejectedSetupException
 import kotlinx.coroutines.flow.Flow
 import org.springframework.messaging.handler.annotation.MessageMapping
@@ -15,27 +16,29 @@ import reactor.core.publisher.Mono
 
 @Controller
 @MessageMapping("api.messages")
-class LiveStreamController(private val messageService: MessageService) {
+class LiveStreamController(
+    private val messageService: MessageService) {
 
-    @MessageMapping("stream")
-    suspend fun receive(@Payload messages: Flow<Message>) =
-        messageService.postMessageInLiveStream(messages)
-
-    @MessageMapping("stream")
-    suspend fun send(): Flow<Message> = messageService.getLiveMessageStream()
+//    @MessageMapping("stream")
+//    suspend fun receive(@Payload messages: Flow<Message>) =
+//        messageService.postMessageInLiveStream(messages)
+//
+//    @MessageMapping("stream")
+//    suspend fun send() = messageService.getLiveMessageStream()
 }
 
 @Controller
-class LiveStreamAuthController (private val userDetailsService: UserDetailsService) {
+class LiveStreamAuthController (
+    private val userDetailsService: UserDetailsService) {
 
     @ConnectMapping
-    fun onConnect(requester: RSocketRequester, @Payload payload: String): Mono<Void> {
+    fun onConnect(requester: RSocketRequester, @Payload payload: AuthPayload): Mono<Void> {
         try{
-            return userDetailsService.isAuthenticated(payload)
+            return userDetailsService.isAuthenticated(payload.token, payload.chatId)
                 .flatMap {
                     if (it) Mono.empty()
                     else Mono.error(RejectedSetupException("Connection is not authenticated"))
-            }
+                }
         } catch (e: AuthException){
             throw RejectedSetupException("Connection is not authenticated")
         }

@@ -13,9 +13,13 @@ class JWTServerAuthenticationConverter : ServerAuthenticationConverter {
     override fun convert(exchange: ServerWebExchange?): Mono<Authentication> {
         if (exchange != null){
             val authHeader = exchange.request.headers["Authorization"]
-            if (authHeader != null && authHeader[0].startsWith("Bearer_")){
-                val token = authHeader[0].substring(7)
-                return Mono.just(UsernamePasswordAuthenticationToken(token, token))
+            val chatHeader = exchange.request.headers["Chat"]
+            if (authHeader != null && authHeader[0].startsWith("Bearer_") && chatHeader != null){
+                return try{
+                    val token = authHeader[0].substring(7)
+                    val chatId = chatHeader[0].toLong()
+                    Mono.just(UsernamePasswordAuthenticationToken(token, chatId))
+                } catch (e: Exception){ Mono.empty() }
             }
         }
         return Mono.empty()

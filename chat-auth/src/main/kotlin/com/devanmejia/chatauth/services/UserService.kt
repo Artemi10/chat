@@ -16,6 +16,7 @@ interface UserService {
     suspend fun signUp(signUpDTO: SignUpDTO): User
     suspend fun checkSecretCode(codeDTO: CodeDTO): User
     suspend fun getUserByLogin(login: String): User
+    suspend fun getChatUser(login: String, chatId: Long): User
 }
 
 @Service
@@ -25,12 +26,12 @@ class UserServiceImpl(
 ) : UserService {
 
     override suspend fun logIn(logInDTO: LogInDTO): User {
-        val user = userRepository.getUserByLogin(logInDTO.login)
+        val user = userRepository.getUserInfo(logInDTO.login)
         if (user != null){
             if (passwordEncoder.matches(logInDTO.password, user.password)){
                 val secretCode = RandomStringUtils.randomAlphabetic(8)
                 user.setNewSecretCode(secretCode)
-                return userRepository.save(user)
+                return userRepository.saveUserInfo(user)
             }
             else throw AuthException("Incorrect password")
         }
@@ -42,17 +43,17 @@ class UserServiceImpl(
             val encodedPassword = passwordEncoder.encode(signUpDTO.password)
             val newUser = User(signUpDTO.login, encodedPassword,
                 signUpDTO.birthDate ,signUpDTO.email)
-            return userRepository.save(newUser)
+            return userRepository.saveUserInfo(newUser)
         }
         else throw AuthException("${signUpDTO.login} has already been registered")
     }
 
     override suspend fun checkSecretCode(codeDTO: CodeDTO): User {
-        val user = userRepository.getUserByLogin(codeDTO.login)
+        val user = userRepository.getUserInfo(codeDTO.login)
         if (user != null){
             if (user.secretCode == codeDTO.code && user.state == UserState.UNVERIFIED){
                 user.discardSecretCode()
-                return userRepository.save(user)
+                return userRepository.saveUserInfo(user)
             }
             else throw AuthException("Incorrect code")
         }
@@ -60,10 +61,16 @@ class UserServiceImpl(
     }
 
     private suspend fun existsByLogin(login: String) =
-        userRepository.getUserByLogin(login) != null
+        userRepository.getUserInfo(login) != null
 
     override suspend fun getUserByLogin(login: String): User {
-        val user = userRepository.getUserByLogin(login)
+        val user = userRepository.getUserInfo(login)
+        if (user != null) return user
+        else throw AuthException("Incorrect login")
+    }
+
+    override suspend fun getChatUser(login: String, chatId: Long): User {
+        val user = userRepository.getChatUserInfo(login, chatId)
         if (user != null) return user
         else throw AuthException("Incorrect login")
     }

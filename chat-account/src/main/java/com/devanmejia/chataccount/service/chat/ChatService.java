@@ -14,7 +14,6 @@ public interface ChatService {
     void addUserToChat(String name, User user);
     Chat createChat(String name, User admin, Set<User> users);
     Chat findByName(String name);
-    List<Chat> findByAdmin(User admin);
     boolean isUserContains(String login, Chat chat);
     boolean isUserAdmin(String login, Chat chat);
 }

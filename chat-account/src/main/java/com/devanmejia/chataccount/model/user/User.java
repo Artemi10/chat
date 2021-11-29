@@ -18,6 +18,8 @@ import java.util.*;
 @Table(name = "users")
 @NoArgsConstructor
 @AllArgsConstructor
+@NamedEntityGraph(name = "user_friends",
+        attributeNodes = @NamedAttributeNode("friends"))
 public class User extends BaseEntity implements UserDetails {
     @NaturalId(mutable = true)
     @Column(name = "login", unique = true)

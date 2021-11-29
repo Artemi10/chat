@@ -2,6 +2,7 @@ package com.devanmejia.chataccount.controller;
 
 import com.devanmejia.chataccount.config.security.authentication.AuthService;
 import com.devanmejia.chataccount.exception.AuthException;
+import com.devanmejia.chataccount.model.Chat;
 import com.devanmejia.chataccount.model.user.State;
 import com.devanmejia.chataccount.model.user.User;
 import com.devanmejia.chataccount.service.converter.Converter;
@@ -13,6 +14,7 @@ import org.springframework.ws.server.endpoint.annotation.PayloadRoot;
 import org.springframework.ws.server.endpoint.annotation.RequestPayload;
 import org.springframework.ws.server.endpoint.annotation.ResponsePayload;
 
+import java.util.List;
 import java.util.Set;
 
 @Endpoint
@@ -58,9 +60,9 @@ public class UserController {
     @PayloadRoot(namespace = NAMESPACE_URI, localPart = "updateUserRequest")
     public UpdateUserResponse updateUser(@RequestPayload UpdateUserRequest request) {
         if (authService.hasPermission(State.ACTIVE)){
-            String login = authService.getUserName();
+            User user = userService.findByLogin(authService.getUserName());
             User userToUpdate = userConverter.reconvert(request.getUserToUpdate());
-            if (userToUpdate.getLogin().equals(login)){
+            if (user.getId().equals(userToUpdate.getId())){
                 UpdateUserResponse response = new UpdateUserResponse();
                 userService.updateUser(userToUpdate);
                 return response;

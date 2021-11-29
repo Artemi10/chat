@@ -5,14 +5,22 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
 
 data class User(
-    @JsonProperty("password") private val password: String,
-    @JsonProperty("state") private val state: UserState,
-    @JsonProperty("enabled") private val enabled: Boolean,
-    @JsonProperty("username") private val username: String,
-    @JsonProperty("authorities") private val authorities: List<Authority>,
-    @JsonProperty("accountNonLocked") private val accountNonLocked: Boolean,
-    @JsonProperty("accountNonExpired") private val accountNonExpired: Boolean,
-    @JsonProperty("credentialsNonExpired") private val credentialsNonExpired: Boolean) : UserDetails{
+    @JsonProperty("password")
+    private val password: String,
+    @JsonProperty("state")
+    private val state: UserState,
+    @JsonProperty("enabled")
+    private val enabled: Boolean,
+    @JsonProperty("username")
+    private val username: String,
+    @JsonProperty("authorities")
+    private val authorities: List<Authority>,
+    @JsonProperty("accountNonLocked")
+    private val accountNonLocked: Boolean,
+    @JsonProperty("accountNonExpired")
+    private val accountNonExpired: Boolean,
+    @JsonProperty("credentialsNonExpired")
+    private val credentialsNonExpired: Boolean) : UserDetails{
 
     override fun getAuthorities() = mutableListOf(SimpleGrantedAuthority(state.name))
 

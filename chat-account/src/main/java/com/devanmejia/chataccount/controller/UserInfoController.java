@@ -3,6 +3,7 @@ package com.devanmejia.chataccount.controller;
 import com.devanmejia.chataccount.config.security.authentication.AuthService;
 import com.devanmejia.chataccount.exception.AuthException;
 import com.devanmejia.chataccount.model.user.State;
+import com.devanmejia.chataccount.model.user.User;
 import com.devanmejia.chataccount.service.converter.Converter;
 import com.devanmejia.chataccount.service.user.UserService;
 import com.devanmejia.chataccount.transfer.UserInfo;
@@ -36,6 +37,20 @@ public class UserInfoController {
             UserInfo userInfo = UserInfo.form(userService.findByLogin(login));
             GetUserInfoResponse response = new GetUserInfoResponse();
             response.setUser(userInfoUserConverter.convert(userInfo));
+            return response;
+        }
+        throw new AuthException("Not permit");
+    }
+
+    @ResponsePayload
+    @PayloadRoot(namespace = NAMESPACE_URI, localPart = "getChatUserInfoRequest")
+    public GetChatUserInfoResponse getChatUserInfo(@RequestPayload GetChatUserInfoRequest request) {
+        if (authService.hasPermission(State.SERVICE)) {
+            User user = userService.findByLogin(request.getLogin());
+            UserInfo userInfo = UserInfo.form(user);
+            userInfo.setEnable(userService.isExistsInChat(user, request.getChatId()));
+            GetChatUserInfoResponse response = new GetChatUserInfoResponse();
+            response.setUser(userInfoUserConverter.convert(UserInfo.form(user)));
             return response;
         }
         throw new AuthException("Not permit");

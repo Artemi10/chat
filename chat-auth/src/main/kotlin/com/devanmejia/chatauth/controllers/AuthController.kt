@@ -1,5 +1,6 @@
 package com.devanmejia.chatauth.controllers
 
+import com.devanmejia.chatauth.models.User
 import com.devanmejia.chatauth.services.EmailService
 import com.devanmejia.chatauth.services.jwt.JWTSigner
 import com.devanmejia.chatauth.services.UserService
@@ -10,9 +11,10 @@ import org.springframework.web.server.ServerWebExchange
 
 @RestController
 @RequestMapping("/api/auth")
-class AuthController(private val jwtSigner: JWTSigner,
-                     private val userService: UserService,
-                     private val emailService: EmailService
+class AuthController(
+    private val jwtSigner: JWTSigner,
+    private val userService: UserService,
+    private val emailService: EmailService
 ) {
 
     @PostMapping("/logIn")
@@ -47,6 +49,12 @@ class AuthController(private val jwtSigner: JWTSigner,
     @GetMapping("/authentication")
     suspend fun getAuthentication(exchange: ServerWebExchange): UserDetails {
         val login = jwtSigner.getLogin(exchange)
-        return userService.getUserByLogin(login)
+        return  userService.getUserByLogin(login)
+    }
+
+    @PostMapping("/authentication")
+    suspend fun getChatAuthentication(exchange: ServerWebExchange, @RequestBody chatId: Long): User {
+        val login = jwtSigner.getLogin(exchange)
+        return userService.getChatUser(login, chatId)
     }
 }

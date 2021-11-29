@@ -16,10 +16,10 @@ import reactor.netty.http.client.HttpClient;
 import java.util.concurrent.TimeUnit
 
 @Configuration
-class UserInfoClientConfig {
+class UserInfoClientConfig (
+    private val webClientBuilder: WebClient.Builder){
 
     @Bean
-    @LoadBalanced
     fun webClient(): WebClient {
         val httpClient = HttpClient.create()
             .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 5000)
@@ -32,7 +32,7 @@ class UserInfoClientConfig {
                 clientCodecConfigurer.customCodecs().register(Jaxb2SoapEncoder())
                 clientCodecConfigurer.customCodecs().register(Jaxb2SoapDecoder())
             }.build()
-        return WebClient.builder()
+        return webClientBuilder
             .clientConnector(ReactorClientHttpConnector(httpClient.wiretap(true)))
             .exchangeStrategies(exchangeStrategies)
             .build()

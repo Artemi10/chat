@@ -33,6 +33,23 @@
         </xs:complexType>
     </xs:element>
 
+    <xs:element name="getChatUserInfoRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="login" type="xs:string"/>
+                <xs:element name="chatId" type="xs:long"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="getChatUserInfoResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="user" type="tns:UserInfoDTO"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
     <xs:complexType name="UserInfoDTO">
         <xs:sequence>
             <xs:element name="login" type="xs:string"/>

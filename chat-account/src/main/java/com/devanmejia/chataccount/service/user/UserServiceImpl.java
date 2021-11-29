@@ -1,17 +1,18 @@
 package com.devanmejia.chataccount.service.user;
 
 import com.devanmejia.chataccount.exception.EntityException;
+import com.devanmejia.chataccount.model.BaseEntity;
+import com.devanmejia.chataccount.model.Chat;
 import com.devanmejia.chataccount.model.user.State;
 import com.devanmejia.chataccount.model.user.User;
 import com.devanmejia.chataccount.repository.UserRepository;
 import com.devanmejia.chataccount.transfer.UserInfo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -36,9 +37,24 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Set<User> getFriends(String login) {
-        return userRepository.findByLoginWithFriends(login)
-                .orElseThrow(() -> new EntityException(String.format("User %s not found", login)))
-                .getFriends();
+        Optional<User> optionalUser = userRepository.findUserWithFriends(login);
+        if (optionalUser.isPresent()){
+            return optionalUser.get().getFriends();
+        }
+        else {
+            return new HashSet<>();
+        }
+    }
+
+    @Override
+    public Set<Chat> getChats(String login) {
+        Optional<User> optionalUser = userRepository.findUserWithChats(login);
+        if (optionalUser.isPresent()){
+            return optionalUser.get().getChats();
+        }
+        else {
+            return new HashSet<>();
+        }
     }
 
     @Override
@@ -77,5 +93,15 @@ public class UserServiceImpl implements UserService {
         else {
             throw new EntityException("Can not update user. Id is not specified");
         }
+    }
+
+    @Override
+    public boolean isExistsInChat(User user, Long chatId) {
+        return userRepository.findUserWithChats(user.getLogin())
+                .orElseThrow(() -> new EntityException("Can not update user. Id is not specified"))
+                .getChats().stream()
+                .map(BaseEntity::getId)
+                .collect(Collectors.toSet())
+                .contains(chatId);
     }
 }

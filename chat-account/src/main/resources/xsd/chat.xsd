@@ -17,11 +17,11 @@
         </xs:complexType>
     </xs:element>
 
-    <xs:element name="getChatsByAdminNameRequest">
+    <xs:element name="getUserChatsRequest">
         <xs:complexType/>
     </xs:element>
 
-    <xs:element name="getChatsByAdminNameResponse">
+    <xs:element name="getUserChatsResponse">
         <xs:complexType>
             <xs:sequence>
                 <xs:element name="chats" type="tns:ChatDTO"
@@ -84,9 +84,7 @@
     </xs:element>
 
     <xs:element name="updateChatNameResponse">
-        <xs:complexType>
-            <xs:sequence/>
-        </xs:complexType>
+        <xs:complexType/>
     </xs:element>
 
     <xs:complexType name="ChatDTO">

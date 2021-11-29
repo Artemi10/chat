@@ -1,0 +1,75 @@
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://spring.io/guides/gs-producing-web-service"
+           targetNamespace="http://spring.io/guides/gs-producing-web-service" elementFormDefault="qualified">
+
+    <xs:element name="getUserInfoRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="login" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="getUserInfoResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="user" type="tns:UserInfoDTO"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="getChatUserInfoRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="login" type="xs:string"/>
+                <xs:element name="chatId" type="xs:long"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="getChatUserInfoResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="user" type="tns:UserInfoDTO"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="saveUserInfoRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="userInfo" type="tns:UserInfoDTO"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="saveUserInfoResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="userInfo" type="tns:UserInfoDTO"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="UserInfoDTO">
+        <xs:sequence>
+            <xs:element name="login" type="xs:string"/>
+            <xs:element name="password" type="xs:string"/>
+            <xs:element name="email" type="xs:string"/>
+            <xs:element name="secretCode" type="xs:string" nillable="true"/>
+            <xs:element name="enable" type="xs:boolean"/>
+            <xs:element name="state" type="tns:state"/>
+            <xs:element name="birthDate" type="xs:date"/>
+            <xs:element name="accountNonLocked" type="xs:boolean"/>
+            <xs:element name="accountNonExpired" type="xs:boolean"/>
+            <xs:element name="credentialsNonExpired" type="xs:boolean"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:simpleType name="state">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="ACTIVE"/>
+            <xs:enumeration value="SERVICE"/>
+            <xs:enumeration value="UNVERIFIED"/>
+        </xs:restriction>
+    </xs:simpleType>
+</xs:schema>
