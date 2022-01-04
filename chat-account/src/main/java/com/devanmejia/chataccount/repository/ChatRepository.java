@@ -22,6 +22,9 @@ public interface ChatRepository extends JpaRepository<Chat, Long> {
     @EntityGraph(type = EntityGraph.EntityGraphType.LOAD, value = "chat_users")
     Optional<Chat> findByName(String name);
 
+    @Query(value = "SELECT chat FROM Chat chat JOIN FETCH chat.users user WHERE user.login = :login")
+    List<Chat> findUserChats(String login, Pageable pageable);
+
     @Modifying
     @Transactional
     @Query(value = "DELETE FROM chats_users WHERE user_id = :userId AND chat_id = :chatId", nativeQuery = true)
@@ -41,4 +44,6 @@ public interface ChatRepository extends JpaRepository<Chat, Long> {
     default boolean notExistsByName(String name){
         return !existsByName(name);
     }
+
+    Optional<Chat> getChatById(long id);
 }

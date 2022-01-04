@@ -18,7 +18,12 @@
     </xs:element>
 
     <xs:element name="getUserChatsRequest">
-        <xs:complexType/>
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="page" type="xs:int"/>
+                <xs:element name="size" type="xs:int"/>
+            </xs:sequence>
+        </xs:complexType>
     </xs:element>
 
     <xs:element name="getUserChatsResponse">
@@ -85,6 +90,23 @@
 
     <xs:element name="updateChatNameResponse">
         <xs:complexType/>
+    </xs:element>
+
+    <xs:element name="isUserChatRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="userId" type="xs:long"/>
+                <xs:element name="chatId" type="xs:long"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="isUserChatResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="isUserChat" type="xs:boolean"/>
+            </xs:sequence>
+        </xs:complexType>
     </xs:element>
 
     <xs:complexType name="ChatDTO">

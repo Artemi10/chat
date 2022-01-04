@@ -47,17 +47,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Set<Chat> getChats(String login) {
-        Optional<User> optionalUser = userRepository.findUserWithChats(login);
-        if (optionalUser.isPresent()){
-            return optionalUser.get().getChats();
-        }
-        else {
-            return new HashSet<>();
-        }
-    }
-
-    @Override
     public UserInfo save(UserInfo userInfo) {
         Optional<User> userOptional = userRepository.findByLogin(userInfo.getLogin());
         User user;
@@ -103,5 +92,25 @@ public class UserServiceImpl implements UserService {
                 .map(BaseEntity::getId)
                 .collect(Collectors.toSet())
                 .contains(chatId);
+    }
+
+    @Override
+    public List<User> getUsersStartWith(String searchName, int page, int size, String login) {
+        if (!searchName.isEmpty()){
+            String pattern = searchName + "%";
+            Pageable pageable = PageRequest.of(page, size);
+            return userRepository.getUserLoginsByPattern(pattern, login, pageable);
+        }
+        else {
+            return new ArrayList<>();
+        }
+    }
+
+    @Override
+    public Set<Long> getChatIds(String login) {
+        Optional<User> userOptional = userRepository.findUserWithChats(login);
+        return userOptional.map(user -> user.getChats().stream()
+                .map(BaseEntity::getId)
+                .collect(Collectors.toSet())).orElseGet(HashSet::new);
     }
 }

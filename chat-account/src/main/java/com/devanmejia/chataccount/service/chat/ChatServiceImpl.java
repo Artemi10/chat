@@ -4,10 +4,13 @@ import com.devanmejia.chataccount.exception.EntityException;
 import com.devanmejia.chataccount.model.Chat;
 import com.devanmejia.chataccount.model.user.User;
 import com.devanmejia.chataccount.repository.ChatRepository;
+import org.hibernate.mapping.Collection;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class ChatServiceImpl implements ChatService{
@@ -74,5 +77,20 @@ public class ChatServiceImpl implements ChatService{
     @Override
     public boolean isUserAdmin(String login, Chat chat) {
         return chat.getAdmin().getLogin().equals(login);
+    }
+
+    @Override
+    public boolean isUserChat(long userId, long chatId) {
+        Optional<Chat> optionalChat = chatRepository.getChatById(chatId);
+        return optionalChat.map(chat -> chat.getUsers().stream()
+                .map(User::getId)
+                .anyMatch(id -> id == userId)).orElse(false);
+    }
+
+    @Override
+    public Set<Chat> getChats(String login, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        List<Chat> chats = chatRepository.findUserChats(login, pageable);
+        return new HashSet<>(chats);
     }
 }

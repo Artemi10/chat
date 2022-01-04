@@ -9,8 +9,8 @@ import org.springframework.stereotype.Service
 @Service
 interface MessageService {
     suspend fun getNextLatestMessages(amount: Int, chatId: Long, skipAmount: Int = 0): List<Message>
-    suspend fun getLiveMessageStream(chatId: Long): Flow<Message>
-    suspend fun postMessageInLiveStream(messages: Flow<Message>, chatId: Long)
+    suspend fun getLiveMessageStream(chatIds: Set<Long>): Flow<Message>
+    suspend fun postMessageInLiveStream(messages: Flow<Message>)
     suspend fun getMessagesByPhrase(phrase: String, chatId: Long): List<Message>
 }
 
@@ -26,13 +26,12 @@ class MessageServiceImpl(
         return messageRepository.getLatestMessages(chatId, pageRequest).reversed()
     }
 
-    override suspend fun getLiveMessageStream(chatId: Long) = stream.filter { it.chatId == chatId }
+    override suspend fun getLiveMessageStream(chatIds: Set<Long>) =
+        stream.filter { chatIds.contains(it.chatId) }
 
-    override suspend fun postMessageInLiveStream(messages: Flow<Message>, chatId: Long) {
-        messages.onEach {
-            it.chatId = chatId
-            stream.emit(it)
-        }.let { messageRepository.saveAll(it) }.collect()
+    override suspend fun postMessageInLiveStream(messages: Flow<Message>) {
+        messages.onEach { stream.emit(it) }
+            .let { messageRepository.saveAll(it) }.collect()
     }
 
     override suspend fun getMessagesByPhrase(phrase: String, chatId: Long): List<Message> =

@@ -17,6 +17,7 @@ interface UserService {
     suspend fun checkSecretCode(codeDTO: CodeDTO): User
     suspend fun getUserByLogin(login: String): User
     suspend fun getChatUser(login: String, chatId: Long): User
+    suspend fun getAvailableChatsId(login: String): Set<Long>
 }
 
 @Service
@@ -74,5 +75,9 @@ class UserServiceImpl(
         if (user != null) return user
         else throw AuthException("Incorrect login")
     }
+
+    override suspend fun getAvailableChatsId(login: String) =
+        userRepository.getUserChatId(login)
+
 }
 

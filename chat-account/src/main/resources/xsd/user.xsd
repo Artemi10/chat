@@ -26,6 +26,25 @@
         </xs:complexType>
     </xs:element>
 
+    <xs:element name="getUserLoginsByPatternRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="searchName" type="xs:string"/>
+                <xs:element name="page" type="xs:int"/>
+                <xs:element name="size" type="xs:int"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="getUserLoginsByPatternResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="users" type="tns:UserDTO"
+                            minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
     <xs:element name="updateUserRequest">
         <xs:complexType>
             <xs:sequence>

@@ -67,9 +67,10 @@ public class ChatController {
 
     @ResponsePayload
     @PayloadRoot(namespace = NAMESPACE_URI, localPart = "getUserChatsRequest")
-    public GetUserChatsResponse getUserChats() {
+    public GetUserChatsResponse getUserChats(@RequestPayload GetUserChatsRequest request) {
         if (authService.hasPermission(State.ACTIVE)){
-            Set<Chat> chats = userService.getChats(authService.getUserName());
+            String login = authService.getUserName();
+            Set<Chat> chats = chatService.getChats(login, request.getPage(), request.getSize());
             GetUserChatsResponse response = new GetUserChatsResponse();
             response.getChats().addAll(chatConverter.convert(chats));
             return response;
@@ -113,6 +114,19 @@ public class ChatController {
         if (authService.hasPermission(State.ACTIVE)) {
             chatService.updateChat(request.getId(), request.getNewChatName());
             return new UpdateChatNameResponse();
+        }
+        throw new AuthException("Not permit");
+    }
+
+    @ResponsePayload
+    @PayloadRoot(namespace = NAMESPACE_URI, localPart = "isUserChatIdRequest")
+    public IsUserChatResponse updateChat(@RequestPayload IsUserChatRequest request) {
+        if (authService.hasPermission(State.ACTIVE)) {
+            boolean isUserChat = chatService
+                    .isUserChat(request.getUserId(), request.getChatId());
+            IsUserChatResponse response = new IsUserChatResponse();
+            response.setIsUserChat(isUserChat);
+            return response;
         }
         throw new AuthException("Not permit");
     }

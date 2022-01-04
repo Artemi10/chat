@@ -8,4 +8,4 @@ data class Message(
     @Id private val id: String? = null,
     val login: String,
     val content: String,
-    var chatId: Long)
+    val chatId: Long)

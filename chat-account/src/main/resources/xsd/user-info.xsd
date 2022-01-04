@@ -17,6 +17,23 @@
         </xs:complexType>
     </xs:element>
 
+    <xs:element name="getUserChatIdRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="login" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="getUserChatIdResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="chatIds" type="xs:long"
+                            minOccurs="0" maxOccurs="unbounded" />
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
     <xs:element name="getChatUserInfoRequest">
         <xs:complexType>
             <xs:sequence>

@@ -15,8 +15,10 @@ class SecurityConfiguration {
     @Bean
     fun securityWebFilterChain(http: ServerHttpSecurity, jwtAuthenticationManager: ReactiveAuthenticationManager,
                                jwtAuthenticationConverter: ServerAuthenticationConverter): SecurityWebFilterChain {
+
         val authenticationWebFilter = AuthenticationWebFilter(jwtAuthenticationManager)
         authenticationWebFilter.setServerAuthenticationConverter(jwtAuthenticationConverter)
+
         return http
             .authorizeExchange()
             .anyExchange().hasAuthority(UserState.ACTIVE.name).and()

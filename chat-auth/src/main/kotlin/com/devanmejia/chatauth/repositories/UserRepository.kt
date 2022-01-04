@@ -16,6 +16,7 @@ import org.springframework.web.reactive.function.client.awaitBody
 interface UserRepository{
     suspend fun getChatUserInfo(login: String, chatId: Long): User?
     suspend fun getUserInfo(login: String): User?
+    suspend fun getUserChatId(login: String): Set<Long>
     suspend fun saveUserInfo(user: User): User
 }
 
@@ -59,6 +60,20 @@ class UserRepositoryImpl(private val webClient: WebClient,
                 .retrieve().awaitBody<GetUserInfoResponse>().user
             converter.reconvert(responseBody)
         } catch (e: Exception){ null }
+    }
+
+    override suspend fun getUserChatId(login: String): Set<Long> {
+        val requestBody = GetUserChatIdRequest()
+        requestBody.login = login
+        val request = UserInfoClientRequest(headerContent, requestBody)
+        return try{
+            webClient.post()
+                .uri(reportsApi)
+                .contentType(MediaType.TEXT_XML)
+                .body(mono { request }, request.javaClass)
+                .retrieve().awaitBody<GetUserChatIdResponse>()
+                .chatIds.toSet()
+        } catch (e: Exception){ emptySet() }
     }
 
     override suspend fun saveUserInfo(user: User): User {

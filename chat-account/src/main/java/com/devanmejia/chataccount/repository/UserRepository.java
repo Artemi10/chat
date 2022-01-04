@@ -28,6 +28,13 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("UPDATE User u SET u.login = :login, u.birthDate = :birthDate " +
             "WHERE u.id = :id")
     void updateUser(Long id, String login, Date birthDate);
+
     Optional<User> findByLogin(String login);
+
     boolean existsByLogin(String login);
+
+    @Query("SELECT user FROM User user " +
+            "WHERE user.login LIKE :pattern AND user.state <> 'SERVICE' AND user.login <> :userLogin " +
+            "ORDER BY user.id")
+    List<User> getUserLoginsByPattern(String pattern, String userLogin, Pageable pageable);
 }

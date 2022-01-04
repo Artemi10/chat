@@ -5,6 +5,7 @@ import com.devanmejia.chatmessaging.exception.AuthException
 import com.devanmejia.chatmessaging.transfer.AuthPayload
 import kotlinx.coroutines.reactor.mono
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.stereotype.Service
 import org.springframework.web.reactive.function.client.WebClient
 import org.springframework.web.reactive.function.client.WebClientException
@@ -13,8 +14,11 @@ import reactor.core.publisher.Mono
 
 @Service
 interface UserDetailsService {
-    fun isAuthenticated(token: String, chatId: Long): Mono<Boolean>
+    suspend fun isAuthenticated(token: String): Boolean
+    suspend fun getUserDetails(token: String): User
+    suspend fun isAuthenticated(token: String, chatId: Long): Boolean
     suspend fun getUserDetails(token: String, chatId: Long): User
+    suspend fun getAvailableChatIds(token: String): Set<Long>
 }
 
 @Service
@@ -23,11 +27,16 @@ class UserDetailsServiceImpl(
     @Value("\${api.auth}") private val apiAuth: String
 ) : UserDetailsService {
 
-    override fun isAuthenticated(token: String, chatId: Long) = mono {
+    override suspend fun isAuthenticated(token: String, chatId: Long): Boolean{
         val user = getUserDetails(token, chatId)
-        user.authorities.map { it.authority }
-            .contains("ACTIVE") && user.isEnabled
+        return isAuthenticated(user)
     }
+
+    override suspend fun isAuthenticated(token: String) =
+        isAuthenticated(getUserDetails(token))
+
+    private fun isAuthenticated(user: UserDetails) =
+        user.authorities.map { it.authority }.contains("ACTIVE") && user.isEnabled
 
     override suspend fun getUserDetails(token: String, chatId: Long): User {
         try{
@@ -35,6 +44,28 @@ class UserDetailsServiceImpl(
                 .uri("$apiAuth/authentication")
                 .header("Authorization", "Bearer_$token")
                 .body(mono { chatId }, Long.javaClass)
+                .retrieve().awaitBody()
+        } catch (ex: WebClientException){
+            throw AuthException("Incorrect token")
+        }
+    }
+
+    override suspend fun getUserDetails(token: String): User {
+        try{
+            return webClientBuilder.build().get()
+                .uri("$apiAuth/authentication")
+                .header("Authorization", "Bearer_$token")
+                .retrieve().awaitBody()
+        } catch (ex: WebClientException){
+            throw AuthException("Incorrect token")
+        }
+    }
+
+    override suspend fun getAvailableChatIds(token: String): Set<Long> {
+        try{
+            return webClientBuilder.build().get()
+                .uri("$apiAuth/authentication/chats")
+                .header("Authorization", "Bearer_$token")
                 .retrieve().awaitBody()
         } catch (ex: WebClientException){
             throw AuthException("Incorrect token")

@@ -2,6 +2,7 @@ package com.devanmejia.chataccount.controller;
 
 import com.devanmejia.chataccount.config.security.authentication.AuthService;
 import com.devanmejia.chataccount.exception.AuthException;
+import com.devanmejia.chataccount.model.BaseEntity;
 import com.devanmejia.chataccount.model.user.State;
 import com.devanmejia.chataccount.model.user.User;
 import com.devanmejia.chataccount.service.converter.Converter;
@@ -13,6 +14,9 @@ import org.springframework.ws.server.endpoint.annotation.Endpoint;
 import org.springframework.ws.server.endpoint.annotation.PayloadRoot;
 import org.springframework.ws.server.endpoint.annotation.RequestPayload;
 import org.springframework.ws.server.endpoint.annotation.ResponsePayload;
+
+import java.util.List;
+import java.util.Set;
 
 @Endpoint
 public class UserInfoController {
@@ -50,7 +54,19 @@ public class UserInfoController {
             UserInfo userInfo = UserInfo.form(user);
             userInfo.setEnable(userService.isExistsInChat(user, request.getChatId()));
             GetChatUserInfoResponse response = new GetChatUserInfoResponse();
-            response.setUser(userInfoUserConverter.convert(UserInfo.form(user)));
+            response.setUser(userInfoUserConverter.convert(userInfo));
+            return response;
+        }
+        throw new AuthException("Not permit");
+    }
+
+    @ResponsePayload
+    @PayloadRoot(namespace = NAMESPACE_URI, localPart = "getUserChatIdRequest")
+    public GetUserChatIdResponse getUserChatId(@RequestPayload GetUserChatIdRequest request) {
+        if (authService.hasPermission(State.SERVICE)) {
+            GetUserChatIdResponse response = new GetUserChatIdResponse();
+            Set<Long> chatIds = userService.getChatIds(request.getLogin());
+            response.getChatIds().addAll(chatIds);
             return response;
         }
         throw new AuthException("Not permit");

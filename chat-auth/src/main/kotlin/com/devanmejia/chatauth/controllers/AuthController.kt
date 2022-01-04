@@ -2,7 +2,7 @@ package com.devanmejia.chatauth.controllers
 
 import com.devanmejia.chatauth.models.User
 import com.devanmejia.chatauth.services.EmailService
-import com.devanmejia.chatauth.services.jwt.JWTSigner
+import com.devanmejia.chatauth.services.JWTSigner
 import com.devanmejia.chatauth.services.UserService
 import com.devanmejia.chatauth.transfer.*
 import org.springframework.security.core.userdetails.UserDetails
@@ -56,5 +56,11 @@ class AuthController(
     suspend fun getChatAuthentication(exchange: ServerWebExchange, @RequestBody chatId: Long): User {
         val login = jwtSigner.getLogin(exchange)
         return userService.getChatUser(login, chatId)
+    }
+
+    @GetMapping("/authentication/chats")
+    suspend fun getAvailableChatsId(exchange: ServerWebExchange): Set<Long> {
+        val login = jwtSigner.getLogin(exchange)
+        return userService.getAvailableChatsId(login)
     }
 }

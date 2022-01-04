@@ -13,7 +13,7 @@ import reactor.core.publisher.Mono
 @Configuration
 class CorsConfig {
     companion object{
-        const val ALLOWED_HEADERS = "x-requested-with, authorization, Content-Type, Content-Length, Authorization, credential, X-XSRF-TOKEN"
+        const val ALLOWED_HEADERS = "x-requested-with, authorization, Content-Type, Content-Length, Authorization, credential, X-XSRF-TOKEN, Chat"
         const val ALLOWED_METHODS = "GET, PUT, POST, DELETE, OPTIONS, PATCH"
         const val ALLOWED_ORIGIN = "*"
     }

@@ -1,6 +1,6 @@
 package com.devanmejia.chatauth.configuration.security
 
-import com.devanmejia.chatauth.services.jwt.JWTSigner
+import com.devanmejia.chatauth.services.JWTSigner
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.Authentication
 import org.springframework.security.web.server.authentication.ServerAuthenticationConverter

@@ -2,7 +2,6 @@ package com.devanmejia.chataccount.controller;
 
 import com.devanmejia.chataccount.config.security.authentication.AuthService;
 import com.devanmejia.chataccount.exception.AuthException;
-import com.devanmejia.chataccount.model.Chat;
 import com.devanmejia.chataccount.model.user.State;
 import com.devanmejia.chataccount.model.user.User;
 import com.devanmejia.chataccount.service.converter.Converter;
@@ -68,6 +67,20 @@ public class UserController {
                 return response;
             }
         }
+        throw new AuthException("Not permit");
+    }
+
+    @ResponsePayload
+    @PayloadRoot(namespace = NAMESPACE_URI, localPart = "getUserLoginsByPatternRequest")
+    public GetUserLoginsByPatternResponse getUserLoginsByPattern(@RequestPayload GetUserLoginsByPatternRequest request){
+        if (authService.hasPermission(State.ACTIVE)){
+            GetUserLoginsByPatternResponse response = new GetUserLoginsByPatternResponse();
+            List<User> users = userService
+                    .getUsersStartWith(request.getSearchName(), request.getPage(),
+                            request.getSize(), authService.getUserName());
+            response.getUsers().addAll(userConverter.convert(users));
+            return response;
+         }
         throw new AuthException("Not permit");
     }
 }

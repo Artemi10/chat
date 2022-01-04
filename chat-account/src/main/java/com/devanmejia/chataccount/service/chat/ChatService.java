@@ -16,4 +16,6 @@ public interface ChatService {
     Chat findByName(String name);
     boolean isUserContains(String login, Chat chat);
     boolean isUserAdmin(String login, Chat chat);
+    boolean isUserChat(long userId, long chatId);
+    Set<Chat> getChats(String login, int page, int size);
 }

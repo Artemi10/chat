@@ -1,8 +1,7 @@
-package com.devanmejia.chatauth.services.jwt
+package com.devanmejia.chatauth.services
 
 import com.devanmejia.chatauth.exceptions.AuthException
 import com.devanmejia.chatauth.models.User
-import com.devanmejia.chatauth.services.UserService
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Jws
 import io.jsonwebtoken.Jwts

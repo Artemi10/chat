@@ -25,7 +25,10 @@ public class Chat extends BaseEntity {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "admin_id")
     private User admin;
-    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "chats")
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "chats_users",
+            joinColumns = { @JoinColumn(name = "chat_id") },
+            inverseJoinColumns = { @JoinColumn(name = "user_id") })
     private Set<User> users = new HashSet<>();
 
     @Override
