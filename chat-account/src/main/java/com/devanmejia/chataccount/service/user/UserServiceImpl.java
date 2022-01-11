@@ -32,16 +32,26 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Set<User> findAllByLogins(Collection<String> logins) {
-        return logins.stream().map(this::findByLogin).collect(Collectors.toSet());
+        return logins.stream()
+                .filter(login -> !login.isEmpty())
+                .map(this::findByLogin)
+                .collect(Collectors.toSet());
+    }
+
+    @Override
+    public Set<User> findAllByLogins(Collection<String> logins, String adminLogin) {
+        return logins.stream()
+                .filter(login -> !login.isEmpty() && !login.equals(adminLogin))
+                .map(this::findByLogin)
+                .collect(Collectors.toSet());
     }
 
     @Override
     public Set<User> getFriends(String login) {
         Optional<User> optionalUser = userRepository.findUserWithFriends(login);
-        if (optionalUser.isPresent()){
+        if (optionalUser.isPresent()) {
             return optionalUser.get().getFriends();
-        }
-        else {
+        } else {
             return new HashSet<>();
         }
     }
@@ -50,15 +60,14 @@ public class UserServiceImpl implements UserService {
     public UserInfo save(UserInfo userInfo) {
         Optional<User> userOptional = userRepository.findByLogin(userInfo.getLogin());
         User user;
-        if (userOptional.isPresent()){
+        if (userOptional.isPresent()) {
             user = userOptional.get();
             user.setLogin(userInfo.getLogin());
             user.setEmail(userInfo.getEmail());
             user.setPassword(userInfo.getPassword());
             user.setSecretCode(userInfo.getSecretCode());
             user.setState(State.valueOf(userInfo.getState()));
-        }
-        else {
+        } else {
             user = new User(userInfo.getLogin(), userInfo.getBirthDate(),
                     userInfo.getEmail(), userInfo.getPassword(), userInfo.getSecretCode(),
                     State.valueOf(userInfo.getState()), new HashSet<>(), new HashSet<>());
@@ -70,16 +79,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public void updateUser(User userToUpdate) {
         String login = userToUpdate.getLogin();
-        if (!userToUpdate.isNew()){
-            if (!userRepository.existsByLogin(login)){
+        if (!userToUpdate.isNew()) {
+            if (!userRepository.existsByLogin(login)) {
                 userRepository.updateUser(userToUpdate.getId(),
                         userToUpdate.getLogin(), userToUpdate.getBirthDate());
-            }
-            else {
+            } else {
                 throw new EntityException(String.format("%s has already been registered", login));
             }
-        }
-        else {
+        } else {
             throw new EntityException("Can not update user. Id is not specified");
         }
     }
@@ -96,12 +103,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> getUsersStartWith(String searchName, int page, int size, String login) {
-        if (!searchName.isEmpty()){
+        if (!searchName.isEmpty()) {
             String pattern = searchName + "%";
             Pageable pageable = PageRequest.of(page, size);
             return userRepository.getUserLoginsByPattern(pattern, login, pageable);
-        }
-        else {
+        } else {
             return new ArrayList<>();
         }
     }

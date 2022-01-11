@@ -22,7 +22,8 @@ public interface ChatRepository extends JpaRepository<Chat, Long> {
     @EntityGraph(type = EntityGraph.EntityGraphType.LOAD, value = "chat_users")
     Optional<Chat> findByName(String name);
 
-    @Query(value = "SELECT chat FROM Chat chat JOIN FETCH chat.users user WHERE user.login = :login")
+    @Query(value = "SELECT chat FROM Chat chat JOIN FETCH chat.users " +
+            "WHERE EXISTS (SELECT user FROM chat.users user WHERE user.login = :login)")
     List<Chat> findUserChats(String login, Pageable pageable);
 
     @Modifying

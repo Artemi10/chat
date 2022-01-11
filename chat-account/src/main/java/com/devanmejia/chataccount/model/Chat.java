@@ -19,7 +19,7 @@ import java.util.Set;
 @NamedEntityGraph(name = "chat_users",
         attributeNodes = @NamedAttributeNode("users"))
 public class Chat extends BaseEntity {
-    @NaturalId
+    @NaturalId(mutable = true)
     @Column(name = "name", unique = true)
     private String name;
     @ManyToOne(fetch = FetchType.EAGER)

@@ -12,6 +12,7 @@ import java.util.Set;
 public interface UserService {
     User findByLogin(String login);
     Set<User> findAllByLogins(Collection<String> logins);
+    Set<User> findAllByLogins(Collection<String> logins, String adminLogin);
     Set<Long> getChatIds(String login);
     Set<User> getFriends(String login);
     void updateUser(User userToUpdate);

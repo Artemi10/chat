@@ -4,11 +4,11 @@ import com.devanmejia.chataccount.exception.EntityException;
 import com.devanmejia.chataccount.model.Chat;
 import com.devanmejia.chataccount.model.user.User;
 import com.devanmejia.chataccount.repository.ChatRepository;
-import org.hibernate.mapping.Collection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
@@ -22,26 +22,15 @@ public class ChatServiceImpl implements ChatService{
     }
 
     @Override
-    public void deleteUserFromChat(String name, User userToDelete) {
+    @Transactional
+    public Chat updateChatUsers(String name, Set<User> usersToDelete, Set<User> usersToAdd) {
         Chat chat = findByName(name);
-        if (!userToDelete.equals(chat.getAdmin())){
-            chatRepository.deleteUserFromChat(userToDelete.getId(), chat.getId());
-        }
-        else {
-            throw new EntityException("Can not remove admin from chat");
-        }
+        Set<User> users = chat.getUsers();
+        usersToDelete.forEach(users::remove);
+        users.addAll(usersToAdd);
+        return chatRepository.save(chat);
     }
 
-    @Override
-    public void addUserToChat(String name, User user) {
-        Chat chat = findByName(name);
-        if (!chat.getUsers().contains(user)){
-            chatRepository.addUserToChat(chat.getId(), user.getId());
-        }
-        else {
-            throw new EntityException(String.format("%s has already been added", user.getLogin()));
-        }
-    }
 
     @Override
     public Chat createChat(String name, User admin, Set<User> users) {
@@ -62,8 +51,20 @@ public class ChatServiceImpl implements ChatService{
     }
 
     @Override
-    public void updateChat(long id, String newName) {
-        chatRepository.updateChat(id, newName);
+    public Chat updateChatName(long id, String newName) {
+       Chat chat = chatRepository.getChatById(id)
+               .orElseThrow(() -> new EntityException("Chat not found"));
+       if (!chat.getName().equals(newName)){
+           if (chatRepository.notExistsByName(newName)){
+               chat.setName(newName);
+               chatRepository.save(chat);
+               return chat;
+           }
+           else{
+               throw new EntityException(String.format("%s has already been created", newName));
+           }
+       }
+       return chat;
     }
 
     @Override
@@ -75,8 +76,9 @@ public class ChatServiceImpl implements ChatService{
     }
 
     @Override
-    public boolean isUserAdmin(String login, Chat chat) {
-        return chat.getAdmin().getLogin().equals(login);
+    public boolean isUserAdmin(String login, long chatId) {
+        Optional<Chat> chatOptional = chatRepository.findById(chatId);
+        return chatOptional.map(chat -> chat.getAdmin().getLogin().equals(login)).orElse(false);
     }
 
     @Override

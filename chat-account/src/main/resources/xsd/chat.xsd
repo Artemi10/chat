@@ -53,32 +53,6 @@
         </xs:complexType>
     </xs:element>
 
-    <xs:element name="deleteUserFromChatRequest">
-        <xs:complexType>
-            <xs:sequence>
-                <xs:element name="chatName" type="xs:string"/>
-                <xs:element name="userName" type="xs:string"/>
-            </xs:sequence>
-        </xs:complexType>
-    </xs:element>
-
-    <xs:element name="deleteUserFromChatResponse">
-        <xs:complexType/>
-    </xs:element>
-
-    <xs:element name="addUserToChatRequest">
-        <xs:complexType>
-            <xs:sequence>
-                <xs:element name="chatName" type="xs:string"/>
-                <xs:element name="userName" type="xs:string"/>
-            </xs:sequence>
-        </xs:complexType>
-    </xs:element>
-
-    <xs:element name="addUserToChatResponse">
-        <xs:complexType/>
-    </xs:element>
-
     <xs:element name="updateChatNameRequest">
         <xs:complexType>
             <xs:sequence>
@@ -89,7 +63,11 @@
     </xs:element>
 
     <xs:element name="updateChatNameResponse">
-        <xs:complexType/>
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="chat" type="tns:ChatDTO"/>
+            </xs:sequence>
+        </xs:complexType>
     </xs:element>
 
     <xs:element name="isUserChatRequest">
@@ -105,6 +83,25 @@
         <xs:complexType>
             <xs:sequence>
                 <xs:element name="isUserChat" type="xs:boolean"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="updateChatRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="chatId" type="xs:long"/>
+                <xs:element name="newChatName" type="xs:string"/>
+                <xs:element name="userLoginsToAdd" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element name="userLoginsToDelete" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="updateChatResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="chat" type="tns:ChatDTO"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
